@@ -40,6 +40,13 @@ class Methylase:
         "N": "N",
     }
 
+    def __init__(self, name, sequence, index_pos, index_neg):
+        self.name = name
+        self.sequence = sequence
+        self.rc = self.reverse_complement(sequence)
+        self.index_pos = index_pos
+        self.index_neg = index_neg
+
     @staticmethod
     def reverse(sequence):
         reverse = sequence[::-1]
@@ -56,10 +63,3 @@ class Methylase:
         r = Methylase.reverse(sequence)
         rc = Methylase.complement(r)
         return rc
-
-    def __init__(self, name, sequence, index_pos, index_neg):
-        self.name = name
-        self.sequence = sequence
-        self.rc = self.reverse_complement(sequence)
-        self.index_pos = index_pos
-        self.index_neg = index_neg
