@@ -63,3 +63,107 @@ class Methylase:
         r = Methylase.reverse(sequence)
         rc = Methylase.complement(r)
         return rc
+
+
+class Methylator:
+    """Class for finding methylation sites within a pattern (site) in a sequence.
+
+
+    **Parameters**
+
+    **sequence**
+    > Sequence of ATGC characters (`str`).
+
+    **methylases**
+    > Methylase class instances (`list`).
+
+    **site**
+    > Sequence of restriction enzyme recognition site (`str`).
+    """
+
+    def __init__(self, sequence, methylases, site):
+        self.sequence = sequence
+        self.methylases = methylases
+        self.site = site
+
+        self.pattern = dnachisel.SequencePattern(site)
+        self.regions_seq = self.pattern.find_matches(self.sequence)
+
+        self.site_rc = Methylase.reverse_complement(site)
+        self.pattern_rc = dnachisel.SequencePattern(self.site_rc)
+        self.regions_rc = self.pattern_rc.find_matches(self.sequence)
+
+        self.regions = self.regions_seq + self.regions_rc
+
+        self.report = ""
+
+    def find_methylation_sites_in_pattern(self):
+        """Run find_one_methylation_site_in_pattern() for each enzyme in methylases"""
+
+        self.report += "Matches against methylase enzyme sites:\n\n"
+        for methylase in self.methylases:
+            self.find_one_methylation_site_in_pattern(methylase)
+            self.report += "\n"
+
+    def find_one_methylation_site_in_pattern(self, methylase):
+        """Find overlapping methylation and restriction sites"""
+
+        extended_regions = self.extend_restriction_regions(methylase)
+
+        # For matching against positive strand of methylation pattern:
+        expression = dnachisel.DnaNotationPattern.dna_sequence_to_regexpr(
+            methylase.sequence
+        )
+        pattern = dnachisel.SequencePattern(expression)
+
+        # For matching against negative strand of methylation pattern:
+        expression_rc = dnachisel.DnaNotationPattern.dna_sequence_to_regexpr(
+            methylase.rc
+        )
+        pattern_rc = dnachisel.SequencePattern(expression_rc)
+
+        self.report += methylase.name + "\n"
+        # print(methylase.name)
+        self.report += "=" * len(methylase.name)
+        # print("=" * len(methylase.name))
+
+        for region in extended_regions:
+            region_sequence = self.sequence[region.start : region.end]
+            self.report += "Region:" + region + "\n"
+            # print("Region:", region)
+
+            match_location = pattern.find_matches(region_sequence)
+            if len(match_location) != 0:
+                self.report += "Match in positive strand: %s" % region_sequence
+                # print("Match in positive strand: %s" % region_sequence)
+            else:
+                self.report += "Positive strand: -\n"
+                # print("Positive strand: -")
+
+            match_location_rc = pattern_rc.find_matches(region_sequence)
+            if len(match_location_rc) != 0:
+                self.report += "Match in negative strand: %s\n" % region_sequence
+                # print("Match in negative strand: %s" % region_sequence)
+            else:
+                self.report += "Negative strand: -\n"
+                # print("Negative strand: -")
+            self.report += "\n"
+            # print()
+
+    def extend_restriction_regions(self, methylase):
+        """Modify list of dnachisel.Location of restriction sites to include
+        flanking nucleotides around restriction sites
+        """
+
+        extended_regions = []
+        for region in self.regions:
+            region = region.extended(
+                methylase.index_neg, left=True, right=False
+            )  # extension upstream
+
+            m = len(methylase.sequence) - (methylase.index_pos + 1)
+            region = region.extended(
+                m, upper_limit=len(self.sequence), left=False, right=True
+            )  # extension downstream
+            extended_regions.append(region)
+        return extended_regions
