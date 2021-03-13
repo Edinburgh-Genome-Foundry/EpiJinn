@@ -1,3 +1,8 @@
+<p align="center">
+<img alt="EpiJinn logo" title="EpiJinn" src="images/epijinn.png" width="120">
+</p>
+
+
 # EpiJinn
 
 **Work in progress!**
