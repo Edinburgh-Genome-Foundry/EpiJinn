@@ -1,3 +1,5 @@
+from Bio.SeqFeature import SeqFeature, FeatureLocation
+
 import dnachisel
 
 
@@ -161,6 +163,45 @@ class Methylator:
             )  # extension downstream
             extended_regions.append(region)
         return extended_regions
+
+
+def annotate_methylation(seqrecord, methylases=None):
+    if methylases is None:
+        methylases = METHYLASES
+    for methylase in methylases:
+        name = methylase.name
+        regex = dnachisel.DnaNotationPattern.dna_sequence_to_regexpr(methylase.sequence)
+        pattern = dnachisel.SequencePattern(regex)
+        match_location = pattern.find_matches(str(seqrecord.seq))
+        if len(match_location) != 0:
+            for match in match_location:
+                seqrecord.features.append(
+                    SeqFeature(
+                        FeatureLocation(match.start, match.end),  # dnachisel.Location
+                        type="CDS",
+                        id="@epijinn",
+                        qualifiers={"label": "@epijinn", "note": name},
+                    )
+                )
+
+    for methylase in methylases:
+        name = methylase.name
+        methylase_rc_seq = dnachisel.reverse_complement(methylase.sequence)
+        regex = dnachisel.DnaNotationPattern.dna_sequence_to_regexpr(methylase_rc_seq)
+        pattern = dnachisel.SequencePattern(regex)
+        match_location = pattern.find_matches(str(seqrecord.seq))
+        if len(match_location) != 0:
+            for match in match_location:
+                seqrecord.features.append(
+                    SeqFeature(
+                        FeatureLocation(match.start, match.end),  # dnachisel.Location
+                        type="CDS",
+                        id="@epijinn_rc",
+                        qualifiers={"label": "@epijinn_rc", "note": name},
+                    )
+                )
+
+    return seqrecord
 
 
 EcoKDam = Methylase(name="EcoKDam", sequence="GATC", index_pos=1, index_neg=2)
