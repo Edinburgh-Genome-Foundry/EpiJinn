@@ -124,12 +124,12 @@ class Methylator:
 
         self.report += methylase.name + "\n"
         # print(methylase.name)
-        self.report += "=" * len(methylase.name)
+        self.report += "=" * len(methylase.name) + "\n"
         # print("=" * len(methylase.name))
 
         for region in extended_regions:
             region_sequence = self.sequence[region.start : region.end]
-            self.report += "Region:" + region + "\n"
+            self.report += "Region:" + str(region) + "\n"
             # print("Region:", region)
 
             match_location = pattern.find_matches(region_sequence)

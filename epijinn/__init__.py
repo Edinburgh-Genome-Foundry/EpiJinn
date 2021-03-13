@@ -1,5 +1,5 @@
 from .version import __version__
 
-from methylases import METHYLASES
+from .methylases import *
 
-from epijinn import Methylase
+from .epijinn import Methylase, Methylator
