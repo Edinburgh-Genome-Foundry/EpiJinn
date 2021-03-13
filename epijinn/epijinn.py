@@ -1,4 +1,3 @@
-import Bio
 import dnachisel
 
 
@@ -98,7 +97,7 @@ class Methylator:
         self.report = ""
 
     def find_methylation_sites_in_pattern(self):
-        """Run find_one_methylation_site_in_pattern() for each enzyme in methylases"""
+        """Run find_one_methylation_site_in_pattern() for each enzyme in methylases."""
 
         self.report += "Matches against methylase enzyme sites:\n\n"
         for methylase in self.methylases:
@@ -106,7 +105,7 @@ class Methylator:
             self.report += "\n"
 
     def find_one_methylation_site_in_pattern(self, methylase):
-        """Find overlapping methylation and restriction sites"""
+        """Find overlapping methylation and restriction sites."""
 
         extended_regions = self.extend_restriction_regions(methylase)
 
@@ -123,36 +122,28 @@ class Methylator:
         pattern_rc = dnachisel.SequencePattern(expression_rc)
 
         self.report += methylase.name + "\n"
-        # print(methylase.name)
         self.report += "=" * len(methylase.name) + "\n"
-        # print("=" * len(methylase.name))
 
         for region in extended_regions:
             region_sequence = self.sequence[region.start : region.end]
             self.report += "Region:" + str(region) + "\n"
-            # print("Region:", region)
 
             match_location = pattern.find_matches(region_sequence)
             if len(match_location) != 0:
-                self.report += "Match in positive strand: %s" % region_sequence
-                # print("Match in positive strand: %s" % region_sequence)
+                self.report += "Match in positive strand: %s\n" % region_sequence
             else:
                 self.report += "Positive strand: -\n"
-                # print("Positive strand: -")
 
             match_location_rc = pattern_rc.find_matches(region_sequence)
             if len(match_location_rc) != 0:
                 self.report += "Match in negative strand: %s\n" % region_sequence
-                # print("Match in negative strand: %s" % region_sequence)
             else:
                 self.report += "Negative strand: -\n"
-                # print("Negative strand: -")
             self.report += "\n"
-            # print()
 
     def extend_restriction_regions(self, methylase):
         """Modify list of dnachisel.Location of restriction sites to include
-        flanking nucleotides around restriction sites
+        flanking nucleotides around restriction sites.
         """
 
         extended_regions = []

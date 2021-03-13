@@ -75,3 +75,21 @@ Result:
     Region: 14-41(+)
     Positive strand: -
     Negative strand: -
+
+
+## DNA sulfur modification
+
+The same approach can be used for finding enzyme site overlaps with other epigenetic modifications. For example, in DNA phosphorothioation, an oxygen on the DNA backbone is replaced with sulfur.
+
+```python
+thio = epijinn.Methylator(sequence, epijinn.dnd, site_BsmBI)
+thio.find_methylation_sites_in_pattern()
+```
+
+This returns an overlap with a putative *dnd* target site of *Streptomyces lividans 1326* with conserved sequence GGCC:
+
+    Dnd_Sli1326
+    ===========
+    Region: 21-33(+)
+    Match in positive strand: GGCCGTCTCAGG
+    Match in negative strand: GGCCGTCTCAGG
