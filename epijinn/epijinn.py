@@ -73,16 +73,19 @@ class Methylator:
     **sequence**
     > Sequence of ATGC characters (`str`).
 
-    **methylases**
-    > Methylase class instances (`list`).
-
     **site**
     > Sequence of restriction enzyme recognition site (`str`).
+
+    **methylases**
+    > Methylase class instances (`list`). Default uses built-in methylases.
     """
 
-    def __init__(self, sequence, methylases, site):
+    def __init__(self, sequence, site, methylases=None):
         self.sequence = sequence
-        self.methylases = methylases
+        if methylases is None:
+            self.methylases = METHYLASES
+        else:
+            self.methylases = methylases
         self.site = site
 
         self.pattern = dnachisel.SequencePattern(site)
@@ -158,3 +161,17 @@ class Methylator:
             )  # extension downstream
             extended_regions.append(region)
         return extended_regions
+
+
+EcoKDam = Methylase(name="EcoKDam", sequence="GATC", index_pos=1, index_neg=2)
+EcoKDcm = Methylase(name="EcoKDcm", sequence="CCWGG", index_pos=1, index_neg=3)
+EcoBI = Methylase(name="EcoBI", sequence="TGANNNNNNNNTGCT", index_pos=2, index_neg=11)
+EcoKI = Methylase(name="EcoKI", sequence="AACNNNNNNGTGC", index_pos=1, index_neg=10)
+
+
+METHYLASES = [
+    EcoKDam,
+    EcoKDcm,
+    EcoBI,
+    EcoKI,
+]

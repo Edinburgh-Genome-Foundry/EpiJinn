@@ -1,7 +1,5 @@
 from .version import __version__
 
-from .epijinn import Methylase, Methylator
+from .epijinn import Methylase, Methylator, METHYLASES
 
-from .methylases import *
-
-from .dnd import *
+from .dnd import Dnd, DND

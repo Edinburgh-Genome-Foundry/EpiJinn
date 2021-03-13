@@ -27,7 +27,7 @@ For information on the effect of DNA methylation on each enzyme, see the [Restri
 
 ```python
 import epijinn
-methylator = epijinn.Methylator(str(sequence), epijinn.methylases, site_BsaI)
+methylator = epijinn.Methylator(sequence=str(sequence), site=site_BsaI)
 methyl.find_methylation_sites_in_pattern()
 ```
 
@@ -45,7 +45,7 @@ site_BsmBI = rest_dict['BsmBI']['site']
 
 epijinn.EcoBI.sequence
 # 'TGANNNNNNNNTGCT'
-methylator = epijinn.Methylator(sequence, epijinn.methylases, site_BsmBI)
+methylator = epijinn.Methylator(sequence, site=site_BsmBI)
 methylator.find_methylation_sites_in_pattern()
 print(methylator.report)
 ```
@@ -87,7 +87,7 @@ Result:
 The same approach can be used for finding enzyme site overlaps with other epigenetic modifications. For example, in DNA phosphorothioation, an oxygen on the DNA backbone is replaced with sulfur.
 
 ```python
-thio = epijinn.Methylator(sequence, epijinn.dnd, site_BsmBI)
+thio = epijinn.Methylator(sequence, site=site_BsmBI, methylases=epijinn.DND)
 thio.find_methylation_sites_in_pattern()
 ```
 
