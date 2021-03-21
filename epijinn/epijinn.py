@@ -250,6 +250,26 @@ def annotate_methylation(seqrecord, methylases=None):
                             qualifiers={"label": label, "note": name},
                         )
                     )
+                    # Mark methylation in antisense of the enzyme site:
+                    # reverse complement so need to count backwards, and strand=1
+                    # subtract 1 to account for range
+                    methylated_position = match.end - 1 - methylase.index_neg
+                    methylated_nucleotide = str(
+                        Seq(
+                            methylase.sequence[methylase.index_neg]
+                        ).reverse_complement()
+                    )
+                    label = "@epijinn(met" + methylated_nucleotide + ", strand=1)"
+                    seqrecord.features.append(
+                        SeqFeature(
+                            FeatureLocation(
+                                methylated_position, methylated_position + 1
+                            ),
+                            type="CDS",
+                            id="@epijinn",
+                            qualifiers={"label": label, "note": name},
+                        )
+                    )
 
     return seqrecord
 
