@@ -176,12 +176,13 @@ def annotate_methylation(seqrecord, methylases=None):
         match_location = pattern.find_matches(str(seqrecord.seq))
         if len(match_location) != 0:
             for match in match_location:
+                label = "@epijinn(" + methylase.name + ")"
                 seqrecord.features.append(
                     SeqFeature(
                         FeatureLocation(match.start, match.end),  # dnachisel.Location
                         type="CDS",
                         id="@epijinn",
-                        qualifiers={"label": "@epijinn", "note": name},
+                        qualifiers={"label": label, "note": name},
                     )
                 )
 
@@ -196,6 +197,7 @@ def annotate_methylation(seqrecord, methylases=None):
             match_location = pattern.find_matches(str(seqrecord.seq))
             if len(match_location) != 0:
                 for match in match_location:
+                    label = "@epijinn_rc(" + methylase.name + ")"
                     seqrecord.features.append(
                         SeqFeature(
                             FeatureLocation(
@@ -203,7 +205,7 @@ def annotate_methylation(seqrecord, methylases=None):
                             ),  # dnachisel.Location
                             type="CDS",
                             id="@epijinn_rc",
-                            qualifiers={"label": "@epijinn_rc", "note": name},
+                            qualifiers={"label": label, "note": name},
                         )
                     )
 
