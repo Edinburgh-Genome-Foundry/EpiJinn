@@ -185,6 +185,30 @@ def annotate_methylation(seqrecord, methylases=None):
                         qualifiers={"label": label, "note": name},
                     )
                 )
+                # Mark the methylation site for checking overlap with restriction site
+                methylated_position = match.start + methylase.index_pos
+                methylated_nucleotide = str(seqrecord.seq[methylated_position])
+                label = "@epijinn(met" + methylated_nucleotide + ", strand=1)"
+                seqrecord.features.append(
+                    SeqFeature(
+                        FeatureLocation(methylated_position, methylated_position + 1),
+                        type="CDS",
+                        id="@epijinn",
+                        qualifiers={"label": label, "note": name},
+                    )
+                )
+                # Negative strand:
+                methylated_position = match.start + methylase.index_neg
+                methylated_nucleotide = str(seqrecord.seq[methylated_position])
+                label = "@epijinn(met" + methylated_nucleotide + ", strand=-1)"
+                seqrecord.features.append(
+                    SeqFeature(
+                        FeatureLocation(methylated_position, methylated_position + 1),
+                        type="CDS",
+                        id="@epijinn",
+                        qualifiers={"label": label, "note": name},
+                    )
+                )
 
         # Repeat for reverse complement, if not palindromic:
         if Seq(methylase.sequence) != Seq(methylase.sequence).reverse_complement():
