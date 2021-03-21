@@ -199,7 +199,9 @@ def annotate_methylation(seqrecord, methylases=None):
                 )
                 # Negative strand:
                 methylated_position = match.start + methylase.index_neg
-                methylated_nucleotide = str(seqrecord.seq[methylated_position])
+                methylated_nucleotide = str(
+                    Seq(seqrecord.seq[methylated_position]).reverse_complement()
+                )
                 label = "@epijinn(met" + methylated_nucleotide + ", strand=-1)"
                 seqrecord.features.append(
                     SeqFeature(
