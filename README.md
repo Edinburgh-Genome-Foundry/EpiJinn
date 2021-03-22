@@ -5,6 +5,9 @@
 
 # EpiJinn
 
+[![Build Status](https://travis-ci.org/Edinburgh-Genome-Foundry/EpiJinn.svg?branch=main)](https://travis-ci.org/Edinburgh-Genome-Foundry/EpiJinn)
+[![Coverage Status](https://coveralls.io/repos/github/Edinburgh-Genome-Foundry/EpiJinn/badge.svg?branch=main)](https://coveralls.io/github/Edinburgh-Genome-Foundry/EpiJinn?branch=main)
+
 **Work in progress!**
 
 **EpiJinn** checks whether recognition sites of prokaryotic DNA *methylase enzymes* overlap with a recognition site of a *restriction enzyme*, in a DNA sequence. Methylation of restriction site nucleotides blocks recognition/restriction and thus DNA assembly.
