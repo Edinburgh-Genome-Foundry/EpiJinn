@@ -1,5 +1,8 @@
 import epijinn
 
+from Bio.Seq import Seq
+from Bio.SeqRecord import SeqRecord
+
 
 def test_Methylase():
     EcoKDam = epijinn.Methylase(
@@ -9,3 +12,10 @@ def test_Methylase():
     assert EcoKDam.reverse("ACGT") == "TGCA"
     assert EcoKDam.complement("ACGT") == "TGCA"
     assert EcoKDam.reverse_complement("ACGT") == "ACGT"
+
+
+def test_annotate_methylation():
+    dna = Seq("TGACCCCCCCCTGCTCCCCCAGCACCCCCCCCTCA")
+    dna_record = SeqRecord(dna, id="example", annotations={"molecule_type": "dna"})
+    dna_annotated = epijinn.annotate_methylation(dna_record)
+    assert len(dna_annotated.features) == 6
