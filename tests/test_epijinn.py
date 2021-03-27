@@ -1,5 +1,6 @@
 import epijinn
 
+import Bio
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
@@ -12,6 +13,19 @@ def test_Methylase():
     assert EcoKDam.reverse("ACGT") == "TGCA"
     assert EcoKDam.complement("ACGT") == "TGCA"
     assert EcoKDam.reverse_complement("ACGT") == "ACGT"
+
+
+def test_Methylator():
+    rest_dict = Bio.Restriction.Restriction_Dictionary.rest_dict
+
+    site_BsmBI = rest_dict["BsmBI"]["site"]
+
+    methylator = epijinn.Methylator(
+        "ATGTCCCCATGCCTACAGCAAGGCCGTCTCAGGCCCCCCCCCCCCA", site=site_BsmBI
+    )
+
+    methylator.find_methylation_sites_in_pattern()
+    assert methylator.report
 
 
 def test_annotate_methylation():
