@@ -1,0 +1,56 @@
+#sidebar: p {{sidebar_text}}
+
+.logos
+  img(src="file:///{{ egf_logo_url }}" style="height:50px; width: auto")
+  img(src="file:///{{ epijinn_logo_url }}" style="height:50px; width: auto; float:right")
+
+hr
+h1 Methylation analysis report
+hr
+
+p.
+  This document reports the sequencing results of the
+  <b>{{ bedmethylitemgroup.name }}</b> project.
+  Each section details the results of a plasmid.
+  Please see the Appendix on the last page for an explanation of the report.
+ 
+div(style="margin-top:1cm; margin-bottom:1cm;")
+
+<div style = "display:block; clear:both; page-break-after:always;"></div>
+
+
+each bedmethylitem in bedmethylitemgroup.bedmethylitems
+
+  h2 {{ bedmethylitem.id }}
+  hr
+
+  p Plot of the sequence:
+
+  img#diff-figure(src="{{ bedmethylitem.bedmethylitem_figure_data }}")
+
+  <div style = "display:block; clear:both; page-break-after:always;"></div>
+
+//- <div style = "display:block; clear:both; page-break-after:always;"></div>
+
+
+
+h2 Appendix
+
+p.
+  Each section describes methylation sequencing results on a plasmid.
+  The plot annotations show methylated positions.
+
+
+style.
+  .green {
+    color: #86bf86
+  }
+  .grey {
+    color: #a9a9a9
+  }
+  .red {
+    color: #fd5a31
+  }
+  .yellow {
+    color: #f7b500
+  }
