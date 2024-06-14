@@ -9,6 +9,9 @@ class BedmethylItem:
 
     **Parameters**
 
+    **sample**
+    > The name of the sample, for example a barcode id (`str`).
+
     **reference**
     > A Biopython SeqRecord.
 
@@ -16,12 +19,12 @@ class BedmethylItem:
     > A pandas dataframe of a bedmethyl file for the reference.
     """
 
-    def __init__(self, reference, bedmethyl):
+    def __init__(self, sample, reference, bedmethyl):
+        self.sample = sample
         self.record = reference
         self.name = reference.name
         self.id = reference.id
         self.bed = bedmethyl
-        self.methylated_cutoff = 0.6  # fraction of methylated base at a position
         self.reference_length = len(self.record)
 
     def perform_analysis(self):

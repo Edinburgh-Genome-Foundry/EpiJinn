@@ -2,7 +2,7 @@ from .version import __version__
 
 from .BedmethylItem import BedmethylItem
 
-from .BedmethylItemGroup import BedmethylItemGroup
+from .BedmethylItemGroup import BedmethylItemGroup, read_sample_sheet
 
 from .epijinn import Methylase, Methylator, METHYLASES, annotate_methylation
 
