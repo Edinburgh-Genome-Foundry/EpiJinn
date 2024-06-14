@@ -60,3 +60,26 @@ class BedmethylItem:
         # Columnname from Bedmethyl specification
         bed_subtype = self.bed.loc[self.bed["modified_base_code_and_motif"] == mod]
         return bed_subtype
+
+    def subset_bed_to_base_matches(self, mod_base="C", mod_base_complement="G"):
+        # POSITIVE STRAND
+        matching_positions_on_positive_strand = [
+            pos for pos, base in enumerate(self.record) if base.upper() == mod_base
+        ]  # for positive strand only
+        positive_strand_filter = self.bed["start_position"].isin(
+            matching_positions_on_positive_strand
+        ) & (self.bed["strand"] == "+")
+
+        # NEGATIVE STRAND
+        matching_positions_on_negative_strand = [
+            pos
+            for pos, base in enumerate(self.record)
+            if base.upper() == mod_base_complement
+        ]
+        negative_strand_filter = self.bed["start_position"].isin(
+            matching_positions_on_negative_strand
+        ) & (self.bed["strand"] == "-")
+
+        bed_basematch = self.bed.loc[positive_strand_filter | negative_strand_filter]
+
+        return bed_basematch
