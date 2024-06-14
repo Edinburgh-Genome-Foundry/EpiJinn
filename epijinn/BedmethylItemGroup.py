@@ -28,10 +28,10 @@ BEDMETHYL_HEADER = [
     "Nnocall",
 ]
 
-MODIFICATIONS = {
-    "h": "C",
-    "m": "C",
-}
+DATA_DIR = os.path.join(os.path.dirname(os.path.realpath(__file__)), "data")
+# For looking up modified_base_code_and_motif entries in bedmethyl:
+MODIFICATION_CODES = pandas.read_csv(os.path.join(DATA_DIR, "mod_base_codes.csv"))
+# Adapted From https://github.com/samtools/hts-specs/blob/master/SAMtags.pdf
 
 
 def read_sample_sheet(
