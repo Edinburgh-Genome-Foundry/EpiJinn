@@ -6,6 +6,33 @@ import Bio
 
 from .BedmethylItem import BedmethylItem
 
+# From https://github.com/nanoporetech/modkit/blob/master/book/src/intro_bedmethyl.md
+BEDMETHYL_HEADER = [
+    "chrom",
+    "start_position",
+    "end_position",
+    "modified_base_code_and_motif",
+    "score",
+    "strand",
+    "strand_start_position",
+    "strand_end_position",
+    "color",
+    "Nvalid_cov",
+    "percent_modified",
+    "Nmod",
+    "Ncanonical",
+    "Nother_mod",
+    "Ndelete",
+    "Nfail",
+    "Ndiff",
+    "Nnocall",
+]
+
+MODIFICATIONS = {
+    "h": "C",
+    "m": "C",
+}
+
 
 def read_sample_sheet(
     sample_sheet, genbank_dir="", bedmethyl_dir="", parameter_sheet=""
@@ -39,9 +66,8 @@ def read_sample_sheet(
 
     # CREATE ITEMS
     # We allow Sequeduct to specify the projectname as a command parameter as well;
-    try:
-        parameter_dict["projectname"]
-    except:  # first entry of the first column (contains projectname):
+    if not "projectname" in parameter_dict:
+        # first entry of the first column (contains projectname):
         parameter_dict["projectname"] = sample_df.iloc[0, 0]
 
     bedmethylitems = []
@@ -55,8 +81,10 @@ def read_sample_sheet(
 
         bed_name = row[3]  # number specified by the sample sheet format
         bed_path = os.path.join(bedmethyl_dir, bed_name)
+        bed_df = pandas.read_csv(bed_path, header=None, delimiter="\t")
+        bed_df.columns = BEDMETHYL_HEADER
         bedmethylitems += [
-            BedmethylItem(sample=row[1], reference=record, bedmethyl=bed_path)
+            BedmethylItem(sample=row[1], reference=record, bedmethyl=bed_df)
         ]  # number specified by the sample sheet format
 
     bedmethylitemgroup = BedmethylItemGroup(
