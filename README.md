@@ -2,7 +2,6 @@
 <img alt="EpiJinn logo" title="EpiJinn" src="images/epijinn.png" width="120">
 </p>
 
-
 # EpiJinn
 
 [![Build Status](https://travis-ci.org/Edinburgh-Genome-Foundry/EpiJinn.svg?branch=main)](https://travis-ci.org/Edinburgh-Genome-Foundry/EpiJinn)
@@ -25,7 +24,6 @@ An example overlap:
 
 For information on the effect of DNA methylation on each enzyme, see the [Restriction Enzyme Database](http://rebase.neb.com/rebase/rebms.html).
 
-
 ## Usage
 
 ```python
@@ -33,7 +31,6 @@ import epijinn
 methylator = epijinn.Methylator(sequence=str(sequence), site=site_BsaI)
 methyl.find_methylation_sites_in_pattern()
 ```
-
 
 ## Example
 
@@ -84,7 +81,6 @@ Result:
     Positive strand: -
     Negative strand: -
 
-
 ## DNA sulfur modification
 
 The same approach can be used for finding enzyme site overlaps with other epigenetic modifications. For example, in DNA phosphorothioation, an oxygen on the DNA backbone is replaced with sulfur.
@@ -101,3 +97,14 @@ This returns an overlap with a putative *dnd* target site of *Streptomyces livid
     Region: 21-33(+)
     Match in positive strand: GGCCGTCTCAGG
     Match in negative strand: GGCCGTCTCAGG
+
+## Versioning
+
+EpiJinn uses the [semantic versioning](https://semver.org) scheme.
+
+## License = GPLv3+
+
+Copyright 2024 Edinburgh Genome Foundry, University of Edinburgh
+
+EpiJinn was written at the [Edinburgh Genome Foundry](https://edinburgh-genome-foundry.github.io/)
+by [Peter Vegh](https://github.com/veghp), and is released under the GPLv3 license.
