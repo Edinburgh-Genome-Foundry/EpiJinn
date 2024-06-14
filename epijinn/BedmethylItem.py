@@ -55,3 +55,8 @@ class BedmethylItem:
         graphic_record.plot(ax=ax1, with_ruler=False, strand_in_label_threshold=4)
 
         return fig
+
+    def subset_bed_to_mod_subtype(self, mod):
+        # Columnname from Bedmethyl specification
+        bed_subtype = self.bed.loc[self.bed["modified_base_code_and_motif"] == mod]
+        return bed_subtype
