@@ -38,6 +38,13 @@ BEDMETHYL_HEADER = [
     "Nnocall",
 ]
 
+# Remove duplicate and unnecessary columns from report:
+columns_for_pdf_report = [
+    BEDMETHYL_HEADER[i] for i in [1, 5, 9, 10, 11, 12, 13, 14, 15, 16, 17]
+] + [
+    "status"
+]  # added during binarization
+
 DATA_DIR = os.path.join(os.path.dirname(os.path.realpath(__file__)), "data")
 # For looking up modified_base_code_and_motif entries in bedmethyl:
 MODIFICATION_CODES = pandas.read_csv(os.path.join(DATA_DIR, "mod_base_codes.csv"))
@@ -124,3 +131,24 @@ class BedmethylItemGroup:
         for bedmethylitem in self.bedmethylitems:
             bedmethylitem.perform_analysis()
         self.comparisons_performed = True
+
+    @staticmethod
+    def subset_bed_columns(bed):
+        bed_report = bed[columns_for_pdf_report]
+        new_columnnames = [
+            "LOC",
+            "Strand",
+            "COV",
+            "% mod",
+            "MOD",
+            "STD",
+            "OTH",
+            "del",
+            "fail",
+            "diff",
+            "nocall",
+            "STATUS",
+        ]
+        bed_report.columns = new_columnnames
+
+        return bed_report
