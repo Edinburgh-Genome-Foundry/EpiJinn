@@ -190,7 +190,7 @@ def annotate_methylation(seqrecord, methylases=None):
                 seqrecord.features.append(
                     SeqFeature(
                         FeatureLocation(match.start, match.end),  # dnachisel.Location
-                        type="CDS",
+                        type="misc_feature",
                         id="@epijinn",
                         qualifiers={"label": label, "note": name},
                     )
@@ -201,8 +201,10 @@ def annotate_methylation(seqrecord, methylases=None):
                 label = "@epijinn(met" + methylated_nucleotide + ", strand=1)"
                 seqrecord.features.append(
                     SeqFeature(
-                        FeatureLocation(methylated_position, methylated_position + 1),
-                        type="CDS",
+                        FeatureLocation(
+                            methylated_position, methylated_position + 1, strand=1
+                        ),
+                        type="misc_feature",
                         id="@epijinn",
                         qualifiers={"label": label, "note": name},
                     )
@@ -215,8 +217,10 @@ def annotate_methylation(seqrecord, methylases=None):
                 label = "@epijinn(met" + methylated_nucleotide + ", strand=-1)"
                 seqrecord.features.append(
                     SeqFeature(
-                        FeatureLocation(methylated_position, methylated_position + 1),
-                        type="CDS",
+                        FeatureLocation(
+                            methylated_position, methylated_position + 1, strand=-1
+                        ),
+                        type="misc_feature",
                         id="@epijinn",
                         qualifiers={"label": label, "note": name},
                     )
@@ -239,7 +243,7 @@ def annotate_methylation(seqrecord, methylases=None):
                             FeatureLocation(
                                 match.start, match.end
                             ),  # dnachisel.Location
-                            type="CDS",
+                            type="misc_feature",
                             id="@epijinn_rc",
                             qualifiers={"label": label, "note": name},
                         )
@@ -253,9 +257,9 @@ def annotate_methylation(seqrecord, methylases=None):
                     seqrecord.features.append(
                         SeqFeature(
                             FeatureLocation(
-                                methylated_position, methylated_position + 1
+                                methylated_position, methylated_position + 1, strand=-1
                             ),
-                            type="CDS",
+                            type="misc_feature",
                             id="@epijinn",
                             qualifiers={"label": label, "note": name},
                         )
@@ -273,9 +277,9 @@ def annotate_methylation(seqrecord, methylases=None):
                     seqrecord.features.append(
                         SeqFeature(
                             FeatureLocation(
-                                methylated_position, methylated_position + 1
+                                methylated_position, methylated_position + 1, strand=1
                             ),
-                            type="CDS",
+                            type="misc_feature",
                             id="@epijinn",
                             qualifiers={"label": label, "note": name},
                         )

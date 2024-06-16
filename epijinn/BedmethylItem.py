@@ -12,6 +12,8 @@ import matplotlib.pyplot as plt
 
 import dna_features_viewer
 
+from .epijinn import annotate_methylation
+
 COMPLEMENTS = {
     "A": "T",
     "C": "G",
@@ -94,3 +96,7 @@ class BedmethylItem:
         bed_basematch = self.bed.loc[positive_strand_filter | negative_strand_filter]
 
         return bed_basematch
+
+    def subset_bed_to_pattern_match(self, methylase):
+        annotated_record = annotate_methylation(self.record)
+        return annotated_record
