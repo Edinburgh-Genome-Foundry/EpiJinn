@@ -10,12 +10,14 @@ hr
 
 p.
   This document reports the sequencing results of the
-  <b>{{ bedmethylitemgroup.name }}</b> project.
+  <b>{{ bedmethylitemgroup.parameter_dict.projectname }}</b> project.
   Each section details the results of a plasmid.
   Please see the Appendix on the last page for an explanation of the report.
- 
-div(style="margin-top:1cm; margin-bottom:1cm;")
 
+
+//- <div style = "display:block; clear:both; page-break-after:always;"></div>
+
+div(style="margin-top:1cm; margin-bottom:1cm;")
 
 
 each bedmethylitem in bedmethylitemgroup.bedmethylitems
@@ -29,14 +31,18 @@ each bedmethylitem in bedmethylitemgroup.bedmethylitems
 
   <div style = "display:block; clear:both; page-break-after:always;"></div>
 
-  each modification, table in bedmethylitem.pdf_results
+  each bedresult in bedmethylitem.results
 
-    Bedmethyl table for {{ modification }}:
+    p Pattern plot for modification "{{ bedresult.modification }}":
+    
+    p Bedmethyl table for modification "{{ bedresult.modification }}":
 
-    {{ table }}
+    {{ bedresult.bed_pdf }}
+
+    <div style = "display:block; clear:both; page-break-after:always;"></div>
 
 
-//- <div style = "display:block; clear:both; page-break-after:always;"></div>
+<div style = "display:block; clear:both; page-break-after:always;"></div>
 
 
 

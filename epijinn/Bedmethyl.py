@@ -62,6 +62,14 @@ MODIFICATION_CODES = pandas.read_csv(os.path.join(DATA_DIR, "mod_base_codes.csv"
 # Adapted From https://github.com/samtools/hts-specs/blob/master/SAMtags.pdf
 
 
+class BedResult:
+    """Results of a bedmethyl table analysis."""
+
+    def __init__(self, modification, bed):
+        self.modification = modification
+        self.bed = bed
+
+
 class BedmethylItem:
     """Analyse a bedmethyl file.
 
@@ -90,7 +98,7 @@ class BedmethylItem:
         """Perform analysis and plot the sequence."""
         # self.annotated_record = self.annotate_record()
         self.fig = self.plot_record()
-        self.results = {}
+        self.results = []  # BedResult instances. For easy reference in pug template.
         for modification in self.bed.modified_base_code_and_motif.unique():
             # RUN BED SUBSET ETC
             bed_subtype = self.subset_bed_to_mod_subtype(self.bed, mod=modification)
@@ -98,7 +106,9 @@ class BedmethylItem:
                 methylase, bed=bed_subtype
             )
             bed_binarized = self.binarize_bed(bed_pattern_match)
-            self.results[modification] = subset_bed_columns(bed_binarized)
+            final_bed = subset_bed_columns(bed_binarized)
+            bedresult = BedResult(modification, bed=final_bed)
+            self.results += [bedresult]
 
     def annotate_record(self):
         return self.record
