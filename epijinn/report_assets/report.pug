@@ -11,13 +11,16 @@ hr
 p.
   This document reports the sequencing results of the
   <b>{{ bedmethylitemgroup.parameter_dict.projectname }}</b> project.
-  Each section details the results of a plasmid.
-  Please see the Appendix on the last page for an explanation of the report.
+  Each chapter details the results of a plasmid, and within a chapter each section
+  reports on one methylation subtype. Finally, the segments of a section describe
+  each investigated methylation pattern.
+  Please see the Appendix on the last page for further explanation of the report.
 
+
+div(style="margin-top:1cm; margin-bottom:1cm;")
 
 //- <div style = "display:block; clear:both; page-break-after:always;"></div>
 
-div(style="margin-top:1cm; margin-bottom:1cm;")
 
 
 each bedmethylitem in bedmethylitemgroup.bedmethylitems
@@ -25,13 +28,16 @@ each bedmethylitem in bedmethylitemgroup.bedmethylitems
   h2 {{ bedmethylitem.id }}
   hr
 
-  p Plot of the sequence:
+  p.
+    Plot of the sequence:
 
   img#diff-figure(src="{{ bedmethylitem.bedmethylitem_figure_data }}")
 
   //- <div style = "display:block; clear:both; page-break-after:always;"></div>
 
   each bedresult in bedmethylitem.results
+
+    div(style="margin-top:1cm; margin-bottom:1cm;")
 
     p Pattern plot for modification "{{ bedresult.modification }}":
     
@@ -41,7 +47,7 @@ each bedmethylitem in bedmethylitemgroup.bedmethylitems
 
     {{ bedresult.bed_pdf }}
 
-    //- div(style="display:block; clear:both; page-break-after:always")
+  div(style="display:block; clear:both; page-break-after:always")
 
   //- <div style = "display:block; clear:both; page-break-after:always;"></div>
 
