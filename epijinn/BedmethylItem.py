@@ -135,3 +135,14 @@ class BedmethylItem:
         bed_pattern_match = bed.loc[positive_strand_filter | negative_strand_filter]
 
         return annotated_record, bed_pattern_match
+
+    @staticmethod
+    def binarize_bed(bed):
+        bed["status"] = "U"  # prefill undetermined
+        for index, row in bed.iterrows():
+            if row["percent_modified"] >= 70:  # good cutoff based on literature
+                bed.loc[index, "status"] = "1"  # methylated, symbol may change
+            elif row["percent_modified"] <= 30:  # cutoff for non-methylated
+                bed.loc[index, "status"] = "0"  # unmethylated
+            # symbol "?" reserved for low coverage to be implemented later
+        return bed
