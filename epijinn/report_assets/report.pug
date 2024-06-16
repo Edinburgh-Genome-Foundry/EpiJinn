@@ -16,7 +16,6 @@ p.
  
 div(style="margin-top:1cm; margin-bottom:1cm;")
 
-<div style = "display:block; clear:both; page-break-after:always;"></div>
 
 
 each bedmethylitem in bedmethylitemgroup.bedmethylitems
@@ -29,6 +28,13 @@ each bedmethylitem in bedmethylitemgroup.bedmethylitems
   img#diff-figure(src="{{ bedmethylitem.bedmethylitem_figure_data }}")
 
   <div style = "display:block; clear:both; page-break-after:always;"></div>
+
+  each modification, table in bedmethylitem.pdf_results
+
+    Bedmethyl table for {{ modification }}:
+
+    {{ table }}
+
 
 //- <div style = "display:block; clear:both; page-break-after:always;"></div>
 
