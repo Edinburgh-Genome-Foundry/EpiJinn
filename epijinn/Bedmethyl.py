@@ -17,8 +17,8 @@ import Bio
 
 import dna_features_viewer
 
-from .epijinn import METHYLASES
-from .epijinn import annotate_methylation
+from .Methyl import METHYLASES
+from .Methyl import annotate_methylation
 
 COMPLEMENTS = {
     "A": "T",

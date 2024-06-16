@@ -8,7 +8,7 @@
 #
 # You should have received a copy of the GNU General Public License along with Ediacara. If not, see <https://www.gnu.org/licenses/>.
 
-from .epijinn import Methylase
+from .Methyl import Methylase
 
 
 class Dnd(Methylase):
