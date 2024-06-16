@@ -65,13 +65,16 @@ class BedmethylItem:
 
         return fig
 
-    def subset_bed_to_mod_subtype(self, mod):
-        # Columnname from Bedmethyl specification
-        bed_subtype = self.bed.loc[self.bed["modified_base_code_and_motif"] == mod]
+    @staticmethod
+    def subset_bed_to_mod_subtype(bed, mod):
+        # Columnname from Bedmethyl file specification
+        bed_subtype = bed.loc[bed["modified_base_code_and_motif"] == mod]
 
         return bed_subtype
 
-    def subset_bed_to_base_matches(self, modified_base="C"):
+    def subset_bed_to_base_matches(self, bed=None, modified_base="C"):
+        if bed is None:  # optional bed allows linking multiple bed subset methods
+            bed = self.bed
         mod_base = modified_base.upper()
         mod_base_complement = COMPLEMENTS[mod_base]
         # POSITIVE STRAND
@@ -80,9 +83,10 @@ class BedmethylItem:
             for pos, base in enumerate(str(self.record.seq.upper()))
             if base == mod_base
         ]
-        positive_strand_filter = self.bed["start_position"].isin(
+        # Columnname from Bedmethyl file specification:
+        positive_strand_filter = bed["start_position"].isin(
             matching_positions_on_positive_strand
-        ) & (self.bed["strand"] == "+")
+        ) & (bed["strand"] == "+")
 
         # NEGATIVE STRAND
         matching_positions_on_negative_strand = [
@@ -90,15 +94,17 @@ class BedmethylItem:
             for pos, base in enumerate(str(self.record.seq.upper()))
             if base == mod_base_complement
         ]
-        negative_strand_filter = self.bed["start_position"].isin(
+        negative_strand_filter = bed["start_position"].isin(
             matching_positions_on_negative_strand
-        ) & (self.bed["strand"] == "-")
+        ) & (bed["strand"] == "-")
 
-        bed_basematch = self.bed.loc[positive_strand_filter | negative_strand_filter]
+        bed_basematch = bed.loc[positive_strand_filter | negative_strand_filter]
 
         return bed_basematch
 
-    def subset_bed_to_pattern_match(self, methylase):
+    def subset_bed_to_pattern_match(self, methylase, bed=None):
+        if bed is None:  # optional bed allows linking multiple bed subset methods
+            bed = self.bed
         methylated_index = methylase.index_pos
         mod_base = methylase.sequence[methylated_index].upper()
 
@@ -117,17 +123,15 @@ class BedmethylItem:
                     negative_strand_locations += [feature.location.start]
 
         # SUBSET USING POSITIONS
-        print(positive_strand_locations)
-        positive_strand_filter = self.bed["start_position"].isin(
+        # Columnname from Bedmethyl file specification:
+        positive_strand_filter = bed["start_position"].isin(
             positive_strand_locations
-        ) & (self.bed["strand"] == "+")
+        ) & (bed["strand"] == "+")
 
-        negative_strand_filter = self.bed["start_position"].isin(
+        negative_strand_filter = bed["start_position"].isin(
             negative_strand_locations
-        ) & (self.bed["strand"] == "-")
+        ) & (bed["strand"] == "-")
 
-        bed_pattern_match = self.bed.loc[
-            positive_strand_filter | negative_strand_filter
-        ]
+        bed_pattern_match = bed.loc[positive_strand_filter | negative_strand_filter]
 
         return annotated_record, bed_pattern_match
