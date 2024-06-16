@@ -12,6 +12,13 @@ import matplotlib.pyplot as plt
 
 import dna_features_viewer
 
+COMPLEMENTS = {
+    "A": "T",
+    "C": "G",
+    "G": "C",
+    "T": "A",
+}
+
 
 class BedmethylItem:
     """Analyse a bedmethyl file.
@@ -61,7 +68,9 @@ class BedmethylItem:
         bed_subtype = self.bed.loc[self.bed["modified_base_code_and_motif"] == mod]
         return bed_subtype
 
-    def subset_bed_to_base_matches(self, mod_base="C", mod_base_complement="G"):
+    def subset_bed_to_base_matches(self, modified_base="C"):
+        mod_base = modified_base.upper()
+        mod_base_complement = COMPLEMENTS[mod_base]
         # POSITIVE STRAND
         matching_positions_on_positive_strand = [
             pos for pos, base in enumerate(self.record) if base.upper() == mod_base
