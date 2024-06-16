@@ -13,6 +13,12 @@ setup(
     license="MIT",
     keywords="biology",
     packages=find_packages(exclude="docs"),
-    install_requires=["biopython", "dnachisel"],
+    install_requires=[
+        "matplotlib",
+        "pandas",
+        "biopython",
+        "dnachisel",
+        "dna_features_viewer",
+    ],
     include_package_data=True,
 )
