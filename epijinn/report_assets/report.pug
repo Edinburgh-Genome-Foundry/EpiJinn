@@ -29,19 +29,21 @@ each bedmethylitem in bedmethylitemgroup.bedmethylitems
 
   img#diff-figure(src="{{ bedmethylitem.bedmethylitem_figure_data }}")
 
-  <div style = "display:block; clear:both; page-break-after:always;"></div>
+  //- <div style = "display:block; clear:both; page-break-after:always;"></div>
 
   each bedresult in bedmethylitem.results
 
     p Pattern plot for modification "{{ bedresult.modification }}":
     
+    img#diff-figure(src="{{ bedresult.figure_data }}")
+
     p Bedmethyl table for modification "{{ bedresult.modification }}":
 
     {{ bedresult.bed_pdf }}
 
-    div(style="display:block; clear:both; page-break-after:always")
+    //- div(style="display:block; clear:both; page-break-after:always")
 
-  <div style = "display:block; clear:both; page-break-after:always;"></div>
+  //- <div style = "display:block; clear:both; page-break-after:always;"></div>
 
 
 h2 Appendix

@@ -61,6 +61,7 @@ def write_bedmethylitemgroup_report(target, bedmethylitemgroup):
             bedresult.bed_pdf = dataframe_to_html(
                 bedresult.bed, extra_classes=("definition",)
             )
+            bedresult.figure_data = pdf_tools.figure_data(bedresult.plot, fmt="svg")
 
     html = end_pug_to_html(
         BEDMETHYLITEMGROUP_REPORT_TEMPLATE, bedmethylitemgroup=bedmethylitemgroup
