@@ -85,26 +85,6 @@ class CustomTranslator(dna_features_viewer.BiopythonTranslator):
         return filtered_features
 
 
-class PatternTranslator(dna_features_viewer.BiopythonTranslator):
-    """Custom translator for displaying pattern features only."""
-
-    def compute_filtered_features(self, features):
-        """Display only EpiJinn features."""
-        filtered_features = []
-        for feature in features:
-            if feature.id == "@epijinn":  # as annotated by function
-                filtered_features += [feature]
-
-        return filtered_features
-        # label_pos = "@epijinn(met" + mod_base + ", strand=1)"
-        # label_neg = "@epijinn(met" + mod_base + ", strand=-1)"
-        # for feature in annotated_record.features:
-        #         if feature.qualifiers["label"] == label_pos:
-        #             positive_strand_locations += [feature.location.start]
-        #         elif feature.qualifiers["label"] == label_neg:
-        #             negative_strand_locations += [feature.location.start]
-
-
 class BedResult:
     """Results of a bedmethyl table analysis."""
 
@@ -113,7 +93,9 @@ class BedResult:
         self.bed = bed
         self.record = record
         fig, ax1 = plt.subplots(1, 1, figsize=(7, 3))
-        graphic_record = PatternTranslator().translate_record(self.record)
+        graphic_record = dna_features_viewer.BiopythonTranslator().translate_record(
+            self.record
+        )
         graphic_record.plot(ax=ax1, with_ruler=False, strand_in_label_threshold=4)
 
         self.plot = fig
@@ -145,7 +127,6 @@ class BedmethylItem:
 
     def perform_analysis(self, methylase):
         """Perform analysis and plot the sequence."""
-        # self.annotated_record = self.annotate_record()
         self.fig = self.plot_record()
         self.results = []  # BedResult instances. For easy reference in pug template.
         for modification in self.bed.modified_base_code_and_motif.unique():
@@ -154,6 +135,14 @@ class BedmethylItem:
             annotated_record, bed_pattern_match = self.subset_bed_to_pattern_match(
                 methylase, bed=bed_subtype
             )
+            # FILTER ANNOTATED RECORD:
+            filtered_features = []
+            label = "@epijinn(" + methylase.name + ")"
+            for feature in annotated_record.features:
+                if feature.id == "@epijinn":  # as annotated by function
+                    if feature.qualifiers["label"] == label:
+                        filtered_features += [feature]
+            annotated_record.features = filtered_features
             bed_binarized = self.binarize_bed(bed_pattern_match)
             final_bed = subset_bed_columns(bed_binarized)
             bedresult = BedResult(modification, bed=final_bed, record=annotated_record)
@@ -163,9 +152,7 @@ class BedmethylItem:
         return self.record
 
     def plot_record(self):
-        fig, (ax1, ax2) = plt.subplots(
-            2, 1, figsize=(7, 3), sharex=True, gridspec_kw={"height_ratios": [4, 1]}
-        )
+        fig, ax1 = plt.subplots(1, 1, figsize=(7, 3))
         graphic_record = CustomTranslator().translate_record(self.record)
         graphic_record.plot(ax=ax1, with_ruler=False, strand_in_label_threshold=4)
 
