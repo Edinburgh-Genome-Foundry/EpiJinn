@@ -97,7 +97,8 @@ class BedmethylItem:
             annotated_record, bed_pattern_match = self.subset_bed_to_pattern_match(
                 methylase, bed=bed_subtype
             )
-            self.results[modification] = subset_bed_columns(bed_pattern_match)
+            bed_binarized = self.binarize_bed(bed_pattern_match)
+            self.results[modification] = subset_bed_columns(bed_binarized)
 
     def annotate_record(self):
         return self.record
