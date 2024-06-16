@@ -73,8 +73,10 @@ class BedmethylItem:
         mod_base_complement = COMPLEMENTS[mod_base]
         # POSITIVE STRAND
         matching_positions_on_positive_strand = [
-            pos for pos, base in enumerate(self.record) if base.upper() == mod_base
-        ]  # for positive strand only
+            pos
+            for pos, base in enumerate(str(self.record.seq.upper()))
+            if base == mod_base
+        ]
         positive_strand_filter = self.bed["start_position"].isin(
             matching_positions_on_positive_strand
         ) & (self.bed["strand"] == "+")
@@ -82,8 +84,8 @@ class BedmethylItem:
         # NEGATIVE STRAND
         matching_positions_on_negative_strand = [
             pos
-            for pos, base in enumerate(self.record)
-            if base.upper() == mod_base_complement
+            for pos, base in enumerate(str(self.record.seq.upper()))
+            if base == mod_base_complement
         ]
         negative_strand_filter = self.bed["start_position"].isin(
             matching_positions_on_negative_strand
