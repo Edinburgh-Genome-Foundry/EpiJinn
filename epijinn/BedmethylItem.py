@@ -68,6 +68,7 @@ class BedmethylItem:
     def subset_bed_to_mod_subtype(self, mod):
         # Columnname from Bedmethyl specification
         bed_subtype = self.bed.loc[self.bed["modified_base_code_and_motif"] == mod]
+
         return bed_subtype
 
     def subset_bed_to_base_matches(self, modified_base="C"):
@@ -98,5 +99,35 @@ class BedmethylItem:
         return bed_basematch
 
     def subset_bed_to_pattern_match(self, methylase):
+        methylated_index = methylase.index_pos
+        mod_base = methylase.sequence[methylated_index].upper()
+
         annotated_record = annotate_methylation(self.record)
-        return annotated_record
+
+        # CREATE LIST OF POSITIONS
+        positive_strand_locations = []
+        negative_strand_locations = []
+        label_pos = "@epijinn(met" + mod_base + ", strand=1)"
+        label_neg = "@epijinn(met" + mod_base + ", strand=-1)"
+        for feature in annotated_record.features:
+            if feature.id == "@epijinn":  # as annotated by function above
+                if feature.qualifiers["label"] == label_pos:
+                    positive_strand_locations += [feature.location.start]
+                elif feature.qualifiers["label"] == label_neg:
+                    negative_strand_locations += [feature.location.start]
+
+        # SUBSET USING POSITIONS
+        print(positive_strand_locations)
+        positive_strand_filter = self.bed["start_position"].isin(
+            positive_strand_locations
+        ) & (self.bed["strand"] == "+")
+
+        negative_strand_filter = self.bed["start_position"].isin(
+            negative_strand_locations
+        ) & (self.bed["strand"] == "-")
+
+        bed_pattern_match = self.bed.loc[
+            positive_strand_filter | negative_strand_filter
+        ]
+
+        return annotated_record, bed_pattern_match
