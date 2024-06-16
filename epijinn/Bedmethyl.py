@@ -62,6 +62,29 @@ MODIFICATION_CODES = pandas.read_csv(os.path.join(DATA_DIR, "mod_base_codes.csv"
 # Adapted From https://github.com/samtools/hts-specs/blob/master/SAMtags.pdf
 
 
+class CustomTranslator(dna_features_viewer.BiopythonTranslator):
+    """Custom translator used in the coverage plot."""
+
+    def compute_filtered_features(self, features):
+        """Display only selected features."""
+        filtered_features = []
+        n = 8  # a good number of features to display
+        # Keep longest features
+        if len(features) > n:
+            feature_lengths = []
+            for feature in features:
+                feature_lengths += [len(feature.location)]
+            feature_lengths.sort(reverse=True)
+            max_length = feature_lengths[n]
+            for feature in features:
+                if len(feature.location) > max_length:
+                    filtered_features += [feature]
+        else:  # no need to do anything if not enough features
+            filtered_features = features
+
+        return filtered_features
+
+
 class BedResult:
     """Results of a bedmethyl table analysis."""
 
@@ -117,9 +140,7 @@ class BedmethylItem:
         fig, (ax1, ax2) = plt.subplots(
             2, 1, figsize=(7, 3), sharex=True, gridspec_kw={"height_ratios": [4, 1]}
         )
-        graphic_record = dna_features_viewer.BiopythonTranslator().translate_record(
-            self.record
-        )
+        graphic_record = CustomTranslator().translate_record(self.record)
         graphic_record.plot(ax=ax1, with_ruler=False, strand_in_label_threshold=4)
 
         return fig
