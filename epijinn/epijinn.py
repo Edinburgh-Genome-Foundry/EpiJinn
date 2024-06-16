@@ -96,7 +96,7 @@ class Methylator:
     def __init__(self, sequence, site, methylases=None):
         self.sequence = sequence
         if methylases is None:
-            self.methylases = METHYLASES
+            self.methylases = list(METHYLASES.values())
         else:
             self.methylases = methylases
         self.site = site
@@ -178,7 +178,7 @@ class Methylator:
 
 def annotate_methylation(seqrecord, methylases=None):
     if methylases is None:
-        methylases = METHYLASES
+        methylases = list(METHYLASES.values())
     for methylase in methylases:
         name = methylase.name
         regex = dnachisel.DnaNotationPattern.dna_sequence_to_regexpr(methylase.sequence)
@@ -290,9 +290,9 @@ EcoBI = Methylase(name="EcoBI", sequence="TGANNNNNNNNTGCT", index_pos=2, index_n
 EcoKI = Methylase(name="EcoKI", sequence="AACNNNNNNGTGC", index_pos=1, index_neg=10)
 
 
-METHYLASES = [
-    EcoKDam,
-    EcoKDcm,
-    EcoBI,
-    EcoKI,
-]
+METHYLASES = {
+    EcoKDam.name: EcoKDam,
+    EcoKDcm.name: EcoKDcm,
+    EcoBI.name: EcoBI,
+    EcoKI.name: EcoKI,
+}
