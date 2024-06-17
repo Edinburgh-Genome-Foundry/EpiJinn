@@ -91,6 +91,18 @@ class BedResult:
 
     def __init__(self, modification, bed, record):
         self.modification = modification
+        self.mod_abbreviation = MODIFICATION_CODES.loc[
+            MODIFICATION_CODES["Code"] == self.modification
+        ].Abbreviation.iloc[
+            0
+        ]  # there is only one entry so we take the first
+        self.mod_name = MODIFICATION_CODES.loc[
+            MODIFICATION_CODES["Code"] == self.modification
+        ].Name.iloc[0]
+        self.mod_chebi = MODIFICATION_CODES.loc[
+            MODIFICATION_CODES["Code"] == self.modification
+        ].ChEBI.iloc[0]
+
         self.bed = bed
         self.record = record
         fig, ax1 = plt.subplots(1, 1, figsize=(7, 3))
@@ -155,7 +167,7 @@ class BedmethylItem:
         return self.record
 
     def plot_record(self):
-        fig, ax1 = plt.subplots(1, 1, figsize=(7, 3))
+        fig, ax1 = plt.subplots(1, 1, figsize=(7, 2))
         graphic_record = CustomTranslator().translate_record(self.record)
         graphic_record.plot(ax=ax1, with_ruler=False, strand_in_label_threshold=4)
 
