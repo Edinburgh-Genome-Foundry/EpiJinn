@@ -105,7 +105,7 @@ class BedResult:
 
         self.bed = bed
         self.record = record
-        fig, ax1 = plt.subplots(1, 1, figsize=(7, 3))
+        fig, ax1 = plt.subplots(1, 1, figsize=(8, 3))
         graphic_record = dna_features_viewer.BiopythonTranslator().translate_record(
             self.record
         )
@@ -167,7 +167,7 @@ class BedmethylItem:
         return self.record
 
     def plot_record(self):
-        fig, ax1 = plt.subplots(1, 1, figsize=(7, 2))
+        fig, ax1 = plt.subplots(1, 1, figsize=(8, 2))
         graphic_record = CustomTranslator().translate_record(self.record)
         graphic_record.plot(ax=ax1, with_ruler=False, strand_in_label_threshold=4)
 

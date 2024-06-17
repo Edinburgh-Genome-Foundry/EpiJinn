@@ -11,9 +11,9 @@ hr
 p.
   This document reports the sequencing results of the
   <b>{{ bedmethylitemgroup.parameter_dict.projectname }}</b> project.
-  Each chapter details the results of a plasmid, and within a chapter each section
-  reports on one methylation subtype. Finally, the segments of a section describe
-  each investigated methylation pattern.
+  Each chapter details the results for one plasmid, and the chapter sections
+  report on each methylation subtype (modified nucleotide) ~ methylation pattern
+  (methylase enzyme recognition site) analysis.
   Please see the Appendix on the last page for further explanation of the report.
 
 
@@ -25,7 +25,7 @@ div(style="margin-top:1cm; margin-bottom:1cm;")
 
 each bedmethylitem in bedmethylitemgroup.bedmethylitems
 
-  h2 {{ bedmethylitem.sample }} &nbsp; | &nbsp; {{ bedmethylitem.id }}
+  h2 {{ bedmethylitem.sample }} &nbsp;&nbsp; | &nbsp;&nbsp; {{ bedmethylitem.id }}
   hr
 
   p.
@@ -39,15 +39,13 @@ each bedmethylitem in bedmethylitemgroup.bedmethylitems
 
     div(style="margin-top:1cm; margin-bottom:1cm;")
 
-    h3 Modification: <b>{{ bedresult.mod_abbreviation }}</b> ({{ bedresult.modification }})
+    hr
+    h3 Modification: {{ bedresult.mod_abbreviation }} ({{ bedresult.modification }}) &nbsp;&nbsp; | &nbsp;&nbsp; Pattern: {{ bedmethylitemgroup.parameter_dict.methylases }}
+    hr
 
-    p <b>{{ bedresult.mod_name }}</b> ({{ bedresult.mod_abbreviation }}), ChEBI={{ bedresult.mod_chebi }}.
-
-    p <b>{{ bedmethylitemgroup.parameter_dict.methylases }}</b> pattern plot:
-    
     img#diff-figure(src="{{ bedresult.figure_data }}")
 
-    p Bedmethyl table for modification <b>{{ bedresult.mod_abbreviation }}</b>:
+    p Bedmethyl table:
 
     {{ bedresult.bed_pdf }}
 
@@ -59,8 +57,42 @@ each bedmethylitem in bedmethylitemgroup.bedmethylitems
 h2 Appendix
 
 p.
-  Each section describes methylation sequencing results on a plasmid.
-  The plot annotations show methylated positions.
+  Each chapter details the results for one plasmid, and the chapter sections
+  report on each methylation subtype (modified nucleotide) ~ methylation pattern
+  (methylase enzyme recognition site) analysis.
+
+p.
+  The following methylase (pattern) was used in this analysis: <b>{{ bedmethylitemgroup.parameter_dict.methylases }}</b>.
+
+p.
+  Modified nucleotide summary table:
+
+table(style='width:50%', border='1')
+  tr
+    th Code
+    th Abbreviation
+    th Name
+    th ChEBI
+  tr
+    td m
+    td 5mC
+    td 5-Methylcytosine
+    td 27551
+  tr
+    td h
+    td 5hmC
+    td 5-Hydroxymethylcytosine
+    td 76792
+  tr
+    td 21839
+    td 4mC
+    td 4-Methylcytosine
+    td 21839
+  tr
+    td a
+    td 6mA
+    td 6-Methyladenine
+    td 28871
 
 
 style.
