@@ -142,6 +142,8 @@ class BedmethylItem:
             for feature in annotated_record.features:
                 if feature.id == "@epijinn":  # as annotated by function
                     if feature.qualifiers["label"] == label:
+                        # display seq in report
+                        feature.qualifiers["label"] = methylase.sequence
                         filtered_features += [feature]
             annotated_record.features = filtered_features
             bed_binarized = self.binarize_bed(bed_pattern_match)
