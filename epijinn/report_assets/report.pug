@@ -39,11 +39,13 @@ each bedmethylitem in bedmethylitemgroup.bedmethylitems
 
     div(style="margin-top:1cm; margin-bottom:1cm;")
 
-    p Pattern plot for modification "{{ bedresult.modification }}":
+    h3 Modification "{{ bedresult.modification }}"
+
+    p Pattern (<b>{{ bedmethylitemgroup.parameter_dict.methylases }}</b>) plot for modification "<b>{{ bedresult.modification }}</b>":
     
     img#diff-figure(src="{{ bedresult.figure_data }}")
 
-    p Bedmethyl table for modification "{{ bedresult.modification }}":
+    p Bedmethyl table for modification "<b>{{ bedresult.modification }}</b>":
 
     {{ bedresult.bed_pdf }}
 
