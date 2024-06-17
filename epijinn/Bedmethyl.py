@@ -8,6 +8,7 @@
 #
 # You should have received a copy of the GNU General Public License along with Ediacara. If not, see <https://www.gnu.org/licenses/>.
 
+import copy
 import os
 
 import pandas
@@ -200,8 +201,8 @@ class BedmethylItem:
             bed = self.bed
         methylated_index = methylase.index_pos
         mod_base = methylase.sequence[methylated_index].upper()
-
-        annotated_record = annotate_methylation(self.record)
+        record_copy = copy.deepcopy(self.record)
+        annotated_record = annotate_methylation(record_copy)
 
         # CREATE LIST OF POSITIONS
         positive_strand_locations = []
