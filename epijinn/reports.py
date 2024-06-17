@@ -41,6 +41,17 @@ def end_pug_to_html(template, **context):
     return pug_to_html(template, **context)
 
 
+def tr_modifier_for_bed_table(tr):
+    tds = list(tr.find_all("td"))
+    if len(tds) == 0:
+        return
+    methylated = tds[-1]  # last column shows status
+    if methylated.text == "1":
+        add_css_class(tr, "negative")
+    # else:
+    #     add_css_class(tr, "positive")
+
+
 def write_bedmethylitemgroup_report(target, bedmethylitemgroup):
     """Write a methylation analysis report with a PDF summary.
 
@@ -53,13 +64,18 @@ def write_bedmethylitemgroup_report(target, bedmethylitemgroup):
     **bedmethylitemgroup**
     > `BedmethylItemGroup` instance.
     """
+
     for bedmethylitem in bedmethylitemgroup.bedmethylitems:
         bedmethylitem.bedmethylitem_figure_data = pdf_tools.figure_data(
             bedmethylitem.fig, fmt="svg"
         )
         for bedresult in bedmethylitem.results:
+
             bedresult.bed_pdf = dataframe_to_html(
                 bedresult.bed, extra_classes=("definition",)
+            )
+            bedresult.bed_pdf = style_table_rows(
+                bedresult.bed_pdf, tr_modifier_for_bed_table
             )
             bedresult.figure_data = pdf_tools.figure_data(bedresult.plot, fmt="svg")
 
