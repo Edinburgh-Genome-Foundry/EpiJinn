@@ -1,0 +1,2 @@
+recursive-include epijinn/report_assets *
+recursive-include epijinn/data *
