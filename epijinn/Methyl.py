@@ -288,37 +288,40 @@ def annotate_methylation(seqrecord, methylases=None):
     return seqrecord
 
 
-EcoKDam = Methylase(name="EcoKDam", sequence="GATC", index_pos=1, index_neg=2)
-EcoKDcm = Methylase(name="EcoKDcm", sequence="CCWGG", index_pos=1, index_neg=3)
-EcoBI = Methylase(name="EcoBI", sequence="TGANNNNNNNNTGCT", index_pos=2, index_neg=11)
-EcoKI = Methylase(name="EcoKI", sequence="AACNNNNNNGTGC", index_pos=1, index_neg=10)
+# Cytosine:
+AluI = Methylase(name="AluI", sequence="AGCT", index_pos=2, index_neg=1)
 BamHI = Methylase(name="BamHI", sequence="GGATCC", index_pos=4, index_neg=1)
 CpG = Methylase(name="CpG", sequence="CG", index_pos=0, index_neg=1)
-AluI = Methylase(name="AluI", sequence="AGCT", index_pos=2, index_neg=1)
-# EcoGII = Methylase(name="EcoGII", sequence="A", index_pos=0, index_neg=)  # no valid index_neg value
-EcoRI = Methylase(name="EcoRI", sequence="GAATTC", index_pos=2, index_neg=3)
+EcoKDcm = Methylase(name="EcoKDcm", sequence="CCWGG", index_pos=1, index_neg=3)
 GpC = Methylase(name="GpC", sequence="GC", index_pos=1, index_neg=0)
 HaeIII = Methylase(name="HaeIII", sequence="GGCC", index_pos=2, index_neg=1)
 Hhal = Methylase(name="Hhal", sequence="GCGC", index_pos=1, index_neg=2)
 HpaII = Methylase(name="HpaII", sequence="CCGG", index_pos=1, index_neg=2)
 MspI = Methylase(name="MspI", sequence="CCGG", index_pos=0, index_neg=3)
+
+# Adenine:
+EcoBI = Methylase(name="EcoBI", sequence="TGANNNNNNNNTGCT", index_pos=2, index_neg=11)
+# EcoGII = Methylase(name="EcoGII", sequence="A", index_pos=0, index_neg=)  # no valid index_neg value
+EcoKDam = Methylase(name="EcoKDam", sequence="GATC", index_pos=1, index_neg=2)
+EcoKI = Methylase(name="EcoKI", sequence="AACNNNNNNGTGC", index_pos=1, index_neg=10)
+EcoRI = Methylase(name="EcoRI", sequence="GAATTC", index_pos=2, index_neg=3)
 TaqI = Methylase(name="TaqI", sequence="TCGA", index_pos=3, index_neg=0)
 
 
 METHYLASES = {
-    EcoKDam.name: EcoKDam,
-    EcoKDcm.name: EcoKDcm,
-    EcoBI.name: EcoBI,
-    EcoKI.name: EcoKI,
+    AluI.name: AluI,
     BamHI.name: BamHI,
     CpG.name: CpG,
-    AluI.name: AluI,
-    # EcoGII.name: EcoGII,
-    EcoRI.name: EcoRI,
+    EcoKDcm.name: EcoKDcm,
     GpC.name: GpC,
     HaeIII.name: HaeIII,
     Hhal.name: Hhal,
     HpaII.name: HpaII,
     MspI.name: MspI,
+    EcoBI.name: EcoBI,
+    # EcoGII.name: EcoGII,
+    EcoKDam.name: EcoKDam,
+    EcoKI.name: EcoKI,
+    EcoRI.name: EcoRI,
     TaqI.name: TaqI,
 }
