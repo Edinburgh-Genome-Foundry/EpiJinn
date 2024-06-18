@@ -11,7 +11,7 @@ EpiJinn is a Python package that checks whether recognition sites of prokaryotic
   pip install epijinn
 
 
-**License:** MIT, Copyright 2021 Edinburgh Genome Foundry
+**License:** GPL, Copyright 2024 Edinburgh Genome Foundry
 
 
 More biology software

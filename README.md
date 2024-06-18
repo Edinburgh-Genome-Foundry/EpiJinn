@@ -9,7 +9,40 @@
 
 **Work in progress!**
 
-**EpiJinn** checks whether recognition sites of prokaryotic DNA *methylase enzymes* overlap with a recognition site of a *restriction enzyme*, in a DNA sequence. Methylation of restriction site nucleotides blocks recognition/restriction and thus DNA assembly.
+**EpiJinn** is a Python package for working with modified (methylated) nucleotides.
+
+* Create a readable report from *bedMethyl* files created by [modkit](https://github.com/nanoporetech/modkit/).
+* Annotate prokaryotic DNA *methylase enzyme* recognition sites in a [Biopython](https://biopython.org/) SeqRecord.
+* Check whether recognition sites of prokaryotic DNA methylase enzymes *overlap* with a recognition site of a *restriction enzyme*, in a DNA sequence. Methylation of restriction site nucleotides blocks recognition/restriction and thus DNA assembly.
+
+The software is geared towards working with plasmids. Several more future functionalities are *planned:* comparing methylation status with expected methylation levels; methylase site recognition etc.
+
+## Install
+
+```bash
+pip install git+https://github.com/Edinburgh-Genome-Foundry/EpiJinn.git
+```
+
+See additional install instructions for the [PDF Reports](https://github.com/Edinburgh-Genome-Foundry/pdf_reports) dependency.
+
+## Usage
+
+### bedMethyl files
+
+```python
+import epijinn
+bedmethylitemgroup = epijinn.read_sample_sheet(
+    sample_sheet="sample_sheet.csv",
+    genbank_dir='genbank',
+    bedmethyl_dir='bedmethyl',
+    parameter_sheet='param_sheet.csv',)
+bedmethylitemgroup.perform_all_analysis_in_bedmethylitemgroup()
+epijinn.write_bedmethylitemgroup_report(target="report.pdf", bedmethylitemgroup=bedmethylitemgroup)
+```
+
+An example sample sheet and parameter sheet is included in the `examples` directory.
+
+### Recognition site overlap
 
 The module contains the `Methylator` class for storing a sequence, methylation enzymes and a restriction enzyme recognition site. It has a method for finding overlaps, and uses [DNA Chisel](https://edinburgh-genome-foundry.github.io/DnaChisel/) to find sequence matches.
 
@@ -24,15 +57,13 @@ An example overlap:
 
 For information on the effect of DNA methylation on each enzyme, see the [Restriction Enzyme Database](http://rebase.neb.com/rebase/rebms.html).
 
-## Usage
-
 ```python
 import epijinn
 methylator = epijinn.Methylator(sequence=str(sequence), site=site_BsaI)
 methyl.find_methylation_sites_in_pattern()
 ```
 
-## Example
+### Example
 
 ```python
 import epijinn
@@ -81,7 +112,7 @@ Result:
     Positive strand: -
     Negative strand: -
 
-## DNA sulfur modification
+### DNA sulfur modification
 
 The same approach can be used for finding enzyme site overlaps with other epigenetic modifications. For example, in DNA phosphorothioation, an oxygen on the DNA backbone is replaced with sulfur.
 

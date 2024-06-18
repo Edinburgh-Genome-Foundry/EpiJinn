@@ -10,7 +10,7 @@ setup(
     author="Peter Vegh",
     description="DNA methylation and restriction",
     long_description=open("pypi-readme.rst").read(),
-    license="MIT",
+    license="GPL",
     keywords="biology",
     packages=find_packages(exclude="docs"),
     install_requires=[
