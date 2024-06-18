@@ -294,6 +294,15 @@ EcoBI = Methylase(name="EcoBI", sequence="TGANNNNNNNNTGCT", index_pos=2, index_n
 EcoKI = Methylase(name="EcoKI", sequence="AACNNNNNNGTGC", index_pos=1, index_neg=10)
 BamHI = Methylase(name="BamHI", sequence="GGATCC", index_pos=4, index_neg=1)
 CpG = Methylase(name="CpG", sequence="CG", index_pos=0, index_neg=1)
+AluI = Methylase(name="AluI", sequence="AGCT", index_pos=2, index_neg=1)
+# EcoGII = Methylase(name="EcoGII", sequence="A", index_pos=0, index_neg=)  # no valid index_neg value
+EcoRI = Methylase(name="EcoRI", sequence="GAATTC", index_pos=2, index_neg=3)
+GpC = Methylase(name="GpC", sequence="GC", index_pos=1, index_neg=0)
+HaeIII = Methylase(name="HaeIII", sequence="GGCC", index_pos=2, index_neg=1)
+Hhal = Methylase(name="Hhal", sequence="GCGC", index_pos=1, index_neg=2)
+HpaII = Methylase(name="HpaII", sequence="CCGG", index_pos=1, index_neg=2)
+MspI = Methylase(name="MspI", sequence="CCGG", index_pos=0, index_neg=3)
+TaqI = Methylase(name="TaqI", sequence="TCGA", index_pos=3, index_neg=0)
 
 
 METHYLASES = {
@@ -303,4 +312,13 @@ METHYLASES = {
     EcoKI.name: EcoKI,
     BamHI.name: BamHI,
     CpG.name: CpG,
+    AluI.name: AluI,
+    # EcoGII.name: EcoGII,
+    EcoRI.name: EcoRI,
+    GpC.name: GpC,
+    HaeIII.name: HaeIII,
+    Hhal.name: Hhal,
+    HpaII.name: HpaII,
+    MspI.name: MspI,
+    TaqI.name: TaqI,
 }
