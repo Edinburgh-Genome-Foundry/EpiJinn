@@ -216,7 +216,7 @@ class BedmethylItem:
         methylated_index = methylase.index_pos
         mod_base = methylase.sequence[methylated_index].upper()
         record_copy = copy.deepcopy(self.record)
-        annotated_record = annotate_methylation(record_copy)
+        annotated_record = annotate_methylation(record_copy, methylases=[methylase])
 
         # CREATE LIST OF POSITIONS
         positive_strand_locations = []
