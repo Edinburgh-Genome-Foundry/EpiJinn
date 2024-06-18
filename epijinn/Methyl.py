@@ -292,6 +292,8 @@ EcoKDam = Methylase(name="EcoKDam", sequence="GATC", index_pos=1, index_neg=2)
 EcoKDcm = Methylase(name="EcoKDcm", sequence="CCWGG", index_pos=1, index_neg=3)
 EcoBI = Methylase(name="EcoBI", sequence="TGANNNNNNNNTGCT", index_pos=2, index_neg=11)
 EcoKI = Methylase(name="EcoKI", sequence="AACNNNNNNGTGC", index_pos=1, index_neg=10)
+BamHI = Methylase(name="BamHI", sequence="GGATCC", index_pos=4, index_neg=1)
+CpG = Methylase(name="CpG", sequence="CG", index_pos=0, index_neg=1)
 
 
 METHYLASES = {
@@ -299,4 +301,6 @@ METHYLASES = {
     EcoKDcm.name: EcoKDcm,
     EcoBI.name: EcoBI,
     EcoKI.name: EcoKI,
+    BamHI.name: BamHI,
+    CpG.name: CpG,
 }
