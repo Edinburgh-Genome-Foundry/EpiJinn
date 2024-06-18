@@ -19,6 +19,7 @@ setup(
         "biopython",
         "dnachisel",
         "dna_features_viewer",
+        "pdf_reports",
     ],
     include_package_data=True,
 )
