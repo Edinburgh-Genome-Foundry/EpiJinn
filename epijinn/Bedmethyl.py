@@ -359,6 +359,7 @@ class BedmethylItemGroup:
     def __init__(self, bedmethylitems, parameter_dict):
         self.bedmethylitems = bedmethylitems
         self.parameter_dict = parameter_dict
+        self.number_of_samples = len(bedmethylitems)
 
     def perform_all_analysis_in_bedmethylitemgroup(self):
         methylase_str = self.parameter_dict["methylases"]
