@@ -66,7 +66,23 @@ p.
   report on each methylation subtype (modified nucleotide) ~ methylation pattern
   (methylase enzyme recognition site) analysis. The sections begin with a sequence plot
   displaying the locations of the pattern. If the pattern is present a large number of 
-  times, then the plot is not displayed. 
+  times, then the plot is not displayed. This is followed by a simplified bedMethyl
+  table, that shows the position (using a zero-based index) and values for each pattern.
+  The columns of the table are:
+  <ul>
+    <li>LOC: Zero-based position of modified nucleotide</li>
+    <li>Strand: DNA strand (+/-)</li>
+    <li>COV: coverage = MOD + STD + OTH</li>
+    <li>% mod: % = MOD / COV * 100</li>
+    <li>MOD: modified count</li>
+    <li>STD: canonical base count</li>
+    <li>OTH: count for other modifications</li>
+    <li>del: number of reads with deletion at this position</li>
+    <li>fail: number of calls below threshold</li>
+    <li>diff: number of reads with base other than canonical at this position</li>
+    <li>nocall: number of reads without modification call</li>
+    <li>STATUS: methylated / undetermined / unmethylated according to user-set threshold (1/U/0)</li>
+  </ul>
 
 p.
   The following methylase (pattern) was used in this analysis: <b>{{ bedmethylitemgroup.parameter_dict.methylases }}</b>.

@@ -72,7 +72,16 @@ def write_bedmethylitemgroup_report(target, bedmethylitemgroup):
         for bedresult in bedmethylitem.results:
 
             bedresult.bed_pdf = dataframe_to_html(
-                bedresult.bed, extra_classes=("definition",)
+                bedresult.bed,
+                extra_classes=(
+                    "ui",
+                    "compact",
+                    "celled",
+                    # "striped",
+                    "table",
+                    "groups",
+                ),
+                use_default_classes=False,
             )
             bedresult.bed_pdf = style_table_rows(
                 bedresult.bed_pdf, tr_modifier_for_bed_table
