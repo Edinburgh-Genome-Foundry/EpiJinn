@@ -144,8 +144,10 @@ class BedmethylItem:
         self.bed = bedmethyl
         self.reference_length = len(self.record)
 
-    def perform_analysis(self, methylase):
+    def perform_analysis(self, parameter_dict):
         """Perform analysis and plot the sequence."""
+        methylase_str = parameter_dict["methylases"]
+        methylase = METHYLASES[methylase_str]
         self.fig = self.plot_record()
         self.results = []  # BedResult instances. For easy reference in pug template.
         for modification in self.bed.modified_base_code_and_motif.unique():
@@ -164,7 +166,11 @@ class BedmethylItem:
                         feature.qualifiers["label"] = methylase.sequence
                         filtered_features += [feature]
             annotated_record.features = filtered_features
-            bed_binarized = self.binarize_bed(bed_pattern_match)
+            bed_binarized = self.binarize_bed(
+                bed_pattern_match,
+                met_cutoff=parameter_dict["methylated_cutoff"],
+                nonmet_cutoff=parameter_dict["unmethylated_cutoff"],
+            )
             final_bed = subset_bed_columns(bed_binarized)
             bedresult = BedResult(modification, bed=final_bed, record=annotated_record)
             self.results += [bedresult]
@@ -251,12 +257,15 @@ class BedmethylItem:
         return annotated_record, bed_pattern_match
 
     @staticmethod
-    def binarize_bed(bed):
+    def binarize_bed(bed, met_cutoff=0.7, nonmet_cutoff=0.3):
+        """
+        met_cutoff and nonmet_cutoff default values are based on preliminary data
+        """
         bed["status"] = "U"  # prefill undetermined
         for index, row in bed.iterrows():
-            if row["percent_modified"] >= 70:  # good cutoff based on literature
+            if row["percent_modified"] >= float(met_cutoff) * 100:
                 bed.loc[index, "status"] = "1"  # methylated, symbol may change
-            elif row["percent_modified"] <= 30:  # cutoff for non-methylated
+            elif row["percent_modified"] <= float(nonmet_cutoff) * 100:
                 bed.loc[index, "status"] = "0"  # unmethylated
             # symbol "?" reserved for low coverage to be implemented later
         return bed
@@ -362,7 +371,6 @@ class BedmethylItemGroup:
         self.number_of_samples = len(bedmethylitems)
 
     def perform_all_analysis_in_bedmethylitemgroup(self):
-        methylase_str = self.parameter_dict["methylases"]
         for bedmethylitem in self.bedmethylitems:
-            bedmethylitem.perform_analysis(methylase=METHYLASES[methylase_str])
+            bedmethylitem.perform_analysis(parameter_dict=self.parameter_dict)
         self.comparisons_performed = True
