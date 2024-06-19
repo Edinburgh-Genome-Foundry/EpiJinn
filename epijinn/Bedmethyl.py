@@ -140,9 +140,10 @@ class BedmethylItem:
 
     def perform_analysis(self, methylase):
         """Perform analysis and plot the sequence."""
+        self.modifications = self.bed.modified_base_code_and_motif.unique()
         self.fig = self.plot_record()
         self.results = []  # BedResult instances. For easy reference in pug template.
-        for modification in self.bed.modified_base_code_and_motif.unique():
+        for modification in self.modifications:
             # RUN BED SUBSET ETC
             bed_subtype = self.subset_bed_to_mod_subtype(self.bed, mod=modification)
             annotated_record, bed_pattern_match = self.subset_bed_to_pattern_match(
@@ -167,9 +168,38 @@ class BedmethylItem:
         return self.record
 
     def plot_record(self):
-        fig, ax1 = plt.subplots(1, 1, figsize=(8, 2))
+        fig, (ax1, ax2) = plt.subplots(
+            2, 1, figsize=(8, 4), sharex=True, gridspec_kw={"height_ratios": [2, 2]}
+        )
         graphic_record = CustomTranslator().translate_record(self.record)
         graphic_record.plot(ax=ax1, with_ruler=False, strand_in_label_threshold=4)
+
+        bed_m = self.subset_bed_to_mod_subtype(self.bed, mod=self.modifications[0])
+        bed_c = self.subset_bed_to_base_matches(
+            bed_m, modified_base="C"
+        )  # lookup later
+
+        ax2.bar(
+            bed_c["start_position"],
+            bed_c["Nmod"],
+            color="r",
+        )
+        ax2.bar(
+            bed_c["start_position"],
+            bed_c["Nother_mod"],
+            bottom=bed_c["Nmod"],
+            color="teal",
+        )
+        ax2.bar(
+            bed_c["start_position"],
+            bed_c["Ncanonical"],
+            bottom=bed_c["Nmod"] + bed_c["Nother_mod"],
+            color="0.7",
+        )
+        ax2.set_xlim(left=0, right=self.reference_length)
+        ax2.set_xlabel("Position [bp]")
+        ax2.set_ylabel("Count")
+        ax2.legend(["Nmod", "Nother_mod", "Ncanonical"])
 
         return fig
 

@@ -301,7 +301,9 @@ MspI = Methylase(name="MspI", sequence="CCGG", index_pos=0, index_neg=3)
 
 # Adenine:
 EcoBI = Methylase(name="EcoBI", sequence="TGANNNNNNNNTGCT", index_pos=2, index_neg=11)
-# EcoGII = Methylase(name="EcoGII", sequence="A", index_pos=0, index_neg=)  # no valid index_neg value
+EcoGII = Methylase(
+    name="EcoGII", sequence="A", index_pos=0, index_neg=0
+)  # no valid index_neg value
 EcoKDam = Methylase(name="EcoKDam", sequence="GATC", index_pos=1, index_neg=2)
 EcoKI = Methylase(name="EcoKI", sequence="AACNNNNNNGTGC", index_pos=1, index_neg=10)
 EcoRI = Methylase(name="EcoRI", sequence="GAATTC", index_pos=2, index_neg=3)
@@ -319,7 +321,7 @@ METHYLASES = {
     HpaII.name: HpaII,
     MspI.name: MspI,
     EcoBI.name: EcoBI,
-    # EcoGII.name: EcoGII,
+    EcoGII.name: EcoGII,
     EcoKDam.name: EcoKDam,
     EcoKI.name: EcoKI,
     EcoRI.name: EcoRI,
