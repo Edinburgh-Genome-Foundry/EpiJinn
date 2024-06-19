@@ -198,7 +198,7 @@ def annotate_methylation(seqrecord, methylases=None):
                 # Mark the methylation site for checking overlap with restriction site
                 methylated_position = match.start + methylase.index_pos
                 methylated_nucleotide = str(methylase.sequence[methylase.index_pos])
-                label = "@epijinn(met" + methylated_nucleotide + ", strand=1)"
+                label = "@epijinn(" + methylated_nucleotide + ", strand=1)"
                 seqrecord.features.append(
                     SeqFeature(
                         FeatureLocation(
@@ -214,7 +214,7 @@ def annotate_methylation(seqrecord, methylases=None):
                 methylated_nucleotide = str(
                     Seq(methylase.sequence[methylase.index_neg]).reverse_complement()
                 )
-                label = "@epijinn(met" + methylated_nucleotide + ", strand=-1)"
+                label = "@epijinn(" + methylated_nucleotide + ", strand=-1)"
                 seqrecord.features.append(
                     SeqFeature(
                         FeatureLocation(
@@ -253,7 +253,7 @@ def annotate_methylation(seqrecord, methylases=None):
                     # subtract 1 to account for range
                     methylated_position = match.end - 1 - methylase.index_pos
                     methylated_nucleotide = str(methylase.sequence[methylase.index_pos])
-                    label = "@epijinn(met" + methylated_nucleotide + ", strand=-1)"
+                    label = "@epijinn(" + methylated_nucleotide + ", strand=-1)"
                     seqrecord.features.append(
                         SeqFeature(
                             FeatureLocation(
@@ -273,7 +273,7 @@ def annotate_methylation(seqrecord, methylases=None):
                             methylase.sequence[methylase.index_neg]
                         ).reverse_complement()
                     )
-                    label = "@epijinn(met" + methylated_nucleotide + ", strand=1)"
+                    label = "@epijinn(" + methylated_nucleotide + ", strand=1)"
                     seqrecord.features.append(
                         SeqFeature(
                             FeatureLocation(

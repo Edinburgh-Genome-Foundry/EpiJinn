@@ -103,9 +103,25 @@ class BedResult:
         self.mod_chebi = MODIFICATION_CODES.loc[
             MODIFICATION_CODES["Code"] == self.modification
         ].ChEBI.iloc[0]
+        self.unmodified_base = MODIFICATION_CODES.loc[
+            MODIFICATION_CODES["Code"] == self.modification
+        ].Unmodified_base.iloc[0]
 
         self.bed = bed
         self.record = record
+
+        # FILTER (ANNOTATED) RECORD:
+        filtered_features = []
+        labelstart = (
+            "@epijinn(" + self.unmodified_base + ", strand="
+        )  # unfinished to account for +/- strands
+        for feature in record.features:
+            if feature.id == "@epijinn":  # as annotated by the function
+                if feature.qualifiers["label"].startswith(labelstart):
+                    # to display seq in report
+                    feature.qualifiers["label"] = self.unmodified_base
+                    filtered_features += [feature]
+        record.features = filtered_features
 
         if len(self.record.features) > self.feature_cutoff:
             self.img_created = False
@@ -156,16 +172,6 @@ class BedmethylItem:
             annotated_record, bed_pattern_match = self.subset_bed_to_pattern_match(
                 methylase, bed=bed_subtype
             )
-            # FILTER ANNOTATED RECORD:
-            filtered_features = []
-            label = "@epijinn(" + methylase.name + ")"
-            for feature in annotated_record.features:
-                if feature.id == "@epijinn":  # as annotated by function
-                    if feature.qualifiers["label"] == label:
-                        # display seq in report
-                        feature.qualifiers["label"] = methylase.sequence
-                        filtered_features += [feature]
-            annotated_record.features = filtered_features
             bed_binarized = self.binarize_bed(
                 bed_pattern_match,
                 met_cutoff=parameter_dict["methylated_cutoff"],
@@ -233,8 +239,8 @@ class BedmethylItem:
         # CREATE LIST OF POSITIONS
         positive_strand_locations = []
         negative_strand_locations = []
-        label_pos = "@epijinn(met" + mod_base + ", strand=1)"
-        label_neg = "@epijinn(met" + mod_base + ", strand=-1)"
+        label_pos = "@epijinn(" + mod_base + ", strand=1)"
+        label_neg = "@epijinn(" + mod_base + ", strand=-1)"
         for feature in annotated_record.features:
             if feature.id == "@epijinn":  # as annotated by function above
                 if feature.qualifiers["label"] == label_pos:
