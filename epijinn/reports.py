@@ -77,7 +77,8 @@ def write_bedmethylitemgroup_report(target, bedmethylitemgroup):
             bedresult.bed_pdf = style_table_rows(
                 bedresult.bed_pdf, tr_modifier_for_bed_table
             )
-            bedresult.figure_data = pdf_tools.figure_data(bedresult.plot, fmt="svg")
+            if bedresult.img_created:
+                bedresult.figure_data = pdf_tools.figure_data(bedresult.plot, fmt="svg")
 
     html = end_pug_to_html(
         BEDMETHYLITEMGROUP_REPORT_TEMPLATE, bedmethylitemgroup=bedmethylitemgroup

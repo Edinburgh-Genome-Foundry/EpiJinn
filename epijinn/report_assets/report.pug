@@ -43,7 +43,12 @@ each bedmethylitem in bedmethylitemgroup.bedmethylitems
     h3 Modification: {{ bedresult.mod_abbreviation }} ({{ bedresult.modification }}) &nbsp;&nbsp; | &nbsp;&nbsp; Pattern: {{ bedmethylitemgroup.parameter_dict.methylases }}
     hr
 
+    //- if bedresult.img_created
+
     img#diff-figure(src="{{ bedresult.figure_data }}")
+
+    //- else
+    //-   p The pattern was found more than {{ bedresult.feature_cutoff }} times, therefore the sequence plot was not created.
 
     p Bedmethyl table:
 
@@ -59,7 +64,9 @@ h2 Appendix
 p.
   Each chapter details the results for one plasmid, and the chapter sections
   report on each methylation subtype (modified nucleotide) ~ methylation pattern
-  (methylase enzyme recognition site) analysis.
+  (methylase enzyme recognition site) analysis. The sections begin with a sequence plot
+  displaying the locations of the pattern. If the pattern is present a large number of 
+  times, then the plot is not displayed. 
 
 p.
   The following methylase (pattern) was used in this analysis: <b>{{ bedmethylitemgroup.parameter_dict.methylases }}</b>.

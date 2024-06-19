@@ -90,6 +90,7 @@ class BedResult:
     """Results of a bedmethyl table analysis."""
 
     def __init__(self, modification, bed, record):
+        self.feature_cutoff = 50  # do not create a plot if there are more features
         self.modification = modification
         self.mod_abbreviation = MODIFICATION_CODES.loc[
             MODIFICATION_CODES["Code"] == self.modification
@@ -105,13 +106,18 @@ class BedResult:
 
         self.bed = bed
         self.record = record
-        fig, ax1 = plt.subplots(1, 1, figsize=(8, 3))
-        graphic_record = dna_features_viewer.BiopythonTranslator().translate_record(
-            self.record
-        )
-        graphic_record.plot(ax=ax1, with_ruler=False, strand_in_label_threshold=4)
 
-        self.plot = fig
+        if len(self.record.features) > self.feature_cutoff:
+            self.img_created = False
+        else:
+            self.img_created = True
+            fig, ax1 = plt.subplots(1, 1, figsize=(8, 3))
+            graphic_record = dna_features_viewer.BiopythonTranslator().translate_record(
+                self.record
+            )
+            graphic_record.plot(ax=ax1, with_ruler=False, strand_in_label_threshold=4)
+
+            self.plot = fig
 
 
 class BedmethylItem:
