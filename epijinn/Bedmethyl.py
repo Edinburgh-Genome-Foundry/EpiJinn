@@ -257,10 +257,7 @@ class BedmethylItem:
         return annotated_record, bed_pattern_match
 
     @staticmethod
-    def binarize_bed(bed, met_cutoff=0.7, nonmet_cutoff=0.3):
-        """
-        met_cutoff and nonmet_cutoff default values are based on preliminary data
-        """
+    def binarize_bed(bed, met_cutoff, nonmet_cutoff):
         bed["status"] = "U"  # prefill undetermined
         for index, row in bed.iterrows():
             if row["percent_modified"] >= float(met_cutoff) * 100:
@@ -306,6 +303,12 @@ def read_sample_sheet(
     if not "projectname" in parameter_dict:
         # first entry of the first column (contains projectname):
         parameter_dict["projectname"] = sample_df.iloc[0, 0]
+    # Allow the user to not specify these in the sheet:
+    # The default cutoffs are based on preliminary data.
+    if not "methylated_cutoff" in parameter_dict:
+        parameter_dict["methylated_cutoff"] = 0.7
+    if not "unmethylated_cutoff" in parameter_dict:
+        parameter_dict["unmethylated_cutoff"] = 0.3
 
     bedmethylitems = []
     for index, row in sample_df.iterrows():
