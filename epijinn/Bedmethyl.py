@@ -86,6 +86,24 @@ class CustomTranslator(dna_features_viewer.BiopythonTranslator):
         return filtered_features
 
 
+class PatternTranslator(dna_features_viewer.BiopythonTranslator):
+    """Custom translator used for the pattern annotation plot."""
+
+    def compute_feature_color(self, feature):
+        status = "status"
+        # Values are from binarize_bed() :
+        if feature.qualifiers[status] == "1":
+            return "red"
+        elif feature.qualifiers[status] == "U":
+            return "yellow"
+        elif feature.qualifiers[status] == "0":
+            return "grey"
+        # to be implemented later:
+        elif feature.qualifiers[status] == "?":
+            return "tab:cyan"
+        # There should be no other options.
+
+
 class BedResult:
     """Results of a bedmethyl table analysis."""
 
@@ -110,7 +128,7 @@ class BedResult:
         self.bed = bed
         self.record = record
 
-        # FILTER (ANNOTATED) RECORD:
+        # FILTER (ANNOTATED) RECORD AND ADD STATUS:
         filtered_features = []
         labelstart = (
             "@epijinn(" + self.unmodified_base + ", strand="
@@ -118,8 +136,17 @@ class BedResult:
         for feature in record.features:
             if feature.id == "@epijinn":  # as annotated by the function
                 if feature.qualifiers["label"].startswith(labelstart):
-                    # to display seq in report
+                    # To display seq in report:
                     feature.qualifiers["label"] = self.unmodified_base
+                    # Assign status:
+                    # no need to check for strand as the complement won't be modified
+                    location_start = int(feature.location.start)
+                    # expect exactly one bed table entry per modified nucleotide:
+                    status_symbol = self.bed.loc[
+                        self.bed["LOC"] == location_start
+                    ].STATUS.iloc[0]
+                    # used by a custom BiopythonTranslator to colour the annotation:
+                    feature.qualifiers["status"] = status_symbol
                     filtered_features += [feature]
         record.features = filtered_features
 
@@ -128,9 +155,7 @@ class BedResult:
         else:
             self.img_created = True
             fig, ax1 = plt.subplots(1, 1, figsize=(8, 3))
-            graphic_record = dna_features_viewer.BiopythonTranslator().translate_record(
-                self.record
-            )
+            graphic_record = PatternTranslator().translate_record(self.record)
             graphic_record.plot(ax=ax1, with_ruler=False, strand_in_label_threshold=4)
 
             self.plot = fig
