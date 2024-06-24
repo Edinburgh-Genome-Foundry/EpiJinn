@@ -23,7 +23,8 @@ The software is geared towards working with plasmids. Several more future functi
 pip install git+https://github.com/Edinburgh-Genome-Foundry/EpiJinn.git
 ```
 
-See additional install instructions for the [PDF Reports](https://github.com/Edinburgh-Genome-Foundry/pdf_reports) dependency.
+See additional install instructions for the [PDF Reports](https://github.com/Edinburgh-Genome-Foundry/pdf_reports) dependency,
+and its Weasyprint dependency.
 
 ## Usage
 
@@ -37,9 +38,10 @@ bedmethylitemgroup = epijinn.read_sample_sheet(
     bedmethyl_dir='bedmethyl',
     parameter_sheet='param_sheet.csv',)
 bedmethylitemgroup.perform_all_analysis_in_bedmethylitemgroup()
-epijinn.write_bedmethylitemgroup_report(target="report.pdf", bedmethylitemgroup=bedmethylitemgroup)
+epijinn.write_bedmethylitemgroup_report(bedmethylitemgroup=bedmethylitemgroup, pdf_file="report.pdf", html_file="report.html")
 ```
 
+Both `pdf_file` and `html_file` are optional, specify `None` to exclude either of them.
 An example sample sheet and parameter sheet is included in the `examples` directory.
 
 ### Recognition site overlap

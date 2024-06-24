@@ -29,7 +29,7 @@ BEDMETHYLITEMGROUP_REPORT_TEMPLATE = os.path.join(ASSETS_PATH, "report.pug")
 STYLESHEET = os.path.join(ASSETS_PATH, "report_style.css")
 
 
-def end_pug_to_html(template, **context):
+def epijinn_pug_to_html(template, **context):
     now = datetime.now().strftime("%Y-%m-%d")
     defaults = {
         "sidebar_text": "Generated on %s by EpiJinn (version %s)" % (now, __version__),
@@ -52,17 +52,22 @@ def tr_modifier_for_bed_table(tr):
     #     add_css_class(tr, "positive")
 
 
-def write_bedmethylitemgroup_report(target, bedmethylitemgroup):
+def write_bedmethylitemgroup_report(
+    bedmethylitemgroup, pdf_file="report.pdf", html_file=None
+):
     """Write a methylation analysis report with a PDF summary.
 
 
     **Parameters**
 
-    **target**
-    > Path for PDF file.
-
     **bedmethylitemgroup**
     > `BedmethylItemGroup` instance.
+
+    **pdf_file**
+    > Optional PDF file name (`str`). Specify `None` to omit.
+
+    **html_file**
+    > Optional HTML file name (`str`). The PDF is created from this HTML data.
     """
 
     for bedmethylitem in bedmethylitemgroup.bedmethylitems:
@@ -89,7 +94,11 @@ def write_bedmethylitemgroup_report(target, bedmethylitemgroup):
             if bedresult.img_created:
                 bedresult.figure_data = pdf_tools.figure_data(bedresult.plot, fmt="svg")
 
-    html = end_pug_to_html(
+    html = epijinn_pug_to_html(
         BEDMETHYLITEMGROUP_REPORT_TEMPLATE, bedmethylitemgroup=bedmethylitemgroup
     )
-    write_report(html, target, extra_stylesheets=(STYLESHEET,))
+    if html_file:
+        with open(html_file, "w") as html_output:
+            html_output.write(html)
+    if pdf_file:
+        write_report(html, pdf_file, extra_stylesheets=(STYLESHEET,))
