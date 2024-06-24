@@ -14,8 +14,8 @@ p.
   There are <b>{{ bedmethylitemgroup.number_of_samples }}</b> samples in this report.
   Each chapter details the results for one sample (plasmid), and the chapter sections
   report on each methylation subtype (modified nucleotide) × methylation pattern
-  (methylase enzyme recognition site) analysis. The following methylase (pattern)
-  was used in this analysis: <b>{{ bedmethylitemgroup.parameter_dict.methylases }}</b>.
+  (methylase enzyme recognition site) analysis. The following methylases (patterns)
+  were used in this analysis: <b>{{ bedmethylitemgroup.parameter_dict.methylases }}</b>.
 
   Please see the Appendix on the last page for further explanation of the report.
 
@@ -45,7 +45,7 @@ each bedmethylitem in bedmethylitemgroup.bedmethylitems
     div(style="margin-top:1cm; margin-bottom:1cm;")
 
     hr
-    h3 {{ bedresult.mod_abbreviation }} ({{ bedresult.modification }}) &nbsp;&nbsp; × &nbsp;&nbsp; {{ bedmethylitemgroup.parameter_dict.methylases }}
+    h3 {{ bedresult.mod_abbreviation }} ({{ bedresult.modification }}) &nbsp;&nbsp; × &nbsp;&nbsp; {{ bedresult.methylase_str }}
     hr
 
     //- if bedresult.img_created

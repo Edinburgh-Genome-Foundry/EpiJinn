@@ -107,7 +107,7 @@ class PatternTranslator(dna_features_viewer.BiopythonTranslator):
 class BedResult:
     """Results of a bedmethyl table analysis."""
 
-    def __init__(self, modification, bed, record):
+    def __init__(self, modification, methylase, bed, record):
         self.feature_cutoff = 50  # do not create a plot if there are more features
         self.modification = modification
         self.mod_abbreviation = MODIFICATION_CODES.loc[
@@ -125,6 +125,7 @@ class BedResult:
             MODIFICATION_CODES["Code"] == self.modification
         ].Unmodified_base.iloc[0]
 
+        self.methylase_str = methylase  # for the report
         self.bed = bed
         self.record = record
 
@@ -187,24 +188,31 @@ class BedmethylItem:
 
     def perform_analysis(self, parameter_dict):
         """Perform analysis and plot the sequence."""
-        methylase_str = parameter_dict["methylases"]
-        methylase = METHYLASES[methylase_str]
         self.fig = self.plot_record()
         self.results = []  # BedResult instances. For easy reference in pug template.
-        for modification in self.bed.modified_base_code_and_motif.unique():
-            # RUN BED SUBSET ETC
-            bed_subtype = self.subset_bed_to_mod_subtype(self.bed, mod=modification)
-            annotated_record, bed_pattern_match = self.subset_bed_to_pattern_match(
-                methylase, bed=bed_subtype
-            )
-            bed_binarized = self.binarize_bed(
-                bed_pattern_match,
-                met_cutoff=parameter_dict["methylated_cutoff"],
-                nonmet_cutoff=parameter_dict["unmethylated_cutoff"],
-            )
-            final_bed = self.subset_bed_columns(bed_binarized)
-            bedresult = BedResult(modification, bed=final_bed, record=annotated_record)
-            self.results += [bedresult]
+        methylase_strings = parameter_dict["methylases"].split(" ")
+        # space-separated as per specifications
+        for methylase_str in methylase_strings:
+            methylase = METHYLASES[methylase_str]
+            for modification in self.bed.modified_base_code_and_motif.unique():
+                # RUN BED SUBSET ETC
+                bed_subtype = self.subset_bed_to_mod_subtype(self.bed, mod=modification)
+                annotated_record, bed_pattern_match = self.subset_bed_to_pattern_match(
+                    methylase, bed=bed_subtype
+                )
+                bed_binarized = self.binarize_bed(
+                    bed_pattern_match,
+                    met_cutoff=parameter_dict["methylated_cutoff"],
+                    nonmet_cutoff=parameter_dict["unmethylated_cutoff"],
+                )
+                final_bed = self.subset_bed_columns(bed_binarized)
+                bedresult = BedResult(
+                    modification=modification,
+                    methylase=methylase_str,
+                    bed=final_bed,
+                    record=annotated_record,
+                )
+                self.results += [bedresult]
 
     def annotate_record(self):
         return self.record

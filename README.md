@@ -43,6 +43,7 @@ epijinn.write_bedmethylitemgroup_report(bedmethylitemgroup=bedmethylitemgroup, p
 
 Both `pdf_file` and `html_file` are optional, specify `None` to exclude either of them.
 An example sample sheet and parameter sheet is included in the `examples` directory.
+Note that multiple methylase enzymes (separated by space) can be specified in the parameter sheet.
 
 ### Recognition site overlap
 
