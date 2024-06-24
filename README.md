@@ -4,8 +4,8 @@
 
 # EpiJinn
 
-[![Build Status](https://travis-ci.org/Edinburgh-Genome-Foundry/EpiJinn.svg?branch=main)](https://travis-ci.org/Edinburgh-Genome-Foundry/EpiJinn)
-[![Coverage Status](https://coveralls.io/repos/github/Edinburgh-Genome-Foundry/EpiJinn/badge.svg?branch=main)](https://coveralls.io/github/Edinburgh-Genome-Foundry/EpiJinn?branch=main)
+![version](https://img.shields.io/badge/current_version-0.2.0-blue)
+[![build](https://github.com/Edinburgh-Genome-Foundry/EpiJinn/actions/workflows/build.yml/badge.svg)](https://github.com/Edinburgh-Genome-Foundry/EpiJinn/actions/workflows/build.yml)
 
 **Work in progress!**
 

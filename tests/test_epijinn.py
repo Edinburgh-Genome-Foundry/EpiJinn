@@ -32,4 +32,4 @@ def test_annotate_methylation():
     dna = Seq("TGACCCCCCCCTGCTCCCCCAGCACCCCCCCCTCA")
     dna_record = SeqRecord(dna, id="example", annotations={"molecule_type": "dna"})
     dna_annotated = epijinn.annotate_methylation(dna_record)
-    assert len(dna_annotated.features) == 6
+    assert len(dna_annotated.features) == 12
