@@ -212,7 +212,7 @@ class BedmethylItem:
     def plot_record(self):
         fig, ax1 = plt.subplots(1, 1, figsize=(8, 2))
         graphic_record = CustomTranslator().translate_record(self.record)
-        graphic_record.plot(ax=ax1, with_ruler=False, strand_in_label_threshold=4)
+        graphic_record.plot(ax=ax1, with_ruler=True, strand_in_label_threshold=4)
 
         return fig
 
