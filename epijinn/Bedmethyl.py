@@ -202,7 +202,7 @@ class BedmethylItem:
                 met_cutoff=parameter_dict["methylated_cutoff"],
                 nonmet_cutoff=parameter_dict["unmethylated_cutoff"],
             )
-            final_bed = subset_bed_columns(bed_binarized)
+            final_bed = self.subset_bed_columns(bed_binarized)
             bedresult = BedResult(modification, bed=final_bed, record=annotated_record)
             self.results += [bedresult]
 
@@ -215,6 +215,28 @@ class BedmethylItem:
         graphic_record.plot(ax=ax1, with_ruler=True, strand_in_label_threshold=4)
 
         return fig
+
+    @staticmethod
+    def subset_bed_columns(bed):
+        bed_report = bed[columns_for_pdf_report]
+        # These were designed to be more informative and fit the report:
+        new_columnnames = [
+            "LOC",
+            "Strand",
+            "COV",
+            "% mod",
+            "MOD",
+            "STD",
+            "OTH",
+            "del",
+            "fail",
+            "diff",
+            "nocall",
+            "STATUS",
+        ]
+        bed_report.columns = new_columnnames
+
+        return bed_report
 
     @staticmethod
     def subset_bed_to_mod_subtype(bed, mod):
@@ -299,6 +321,30 @@ class BedmethylItem:
         return bed
 
 
+class BedmethylItemGroup:
+    """A group of BedmethylItem instances for reporting.
+
+
+    **Parameters**
+
+    **bedmethylitems**
+    > A list of BedmethylItem instances.
+
+    **parameter_dict**
+    > A dictionary of analysis parameters (`dict`).
+    """
+
+    def __init__(self, bedmethylitems, parameter_dict):
+        self.bedmethylitems = bedmethylitems
+        self.parameter_dict = parameter_dict
+        self.number_of_samples = len(bedmethylitems)
+
+    def perform_all_analysis_in_bedmethylitemgroup(self):
+        for bedmethylitem in self.bedmethylitems:
+            bedmethylitem.perform_analysis(parameter_dict=self.parameter_dict)
+        self.comparisons_performed = True
+
+
 def read_sample_sheet(
     sample_sheet, genbank_dir="", bedmethyl_dir="", parameter_sheet=""
 ):
@@ -362,49 +408,3 @@ def read_sample_sheet(
         bedmethylitems=bedmethylitems, parameter_dict=parameter_dict
     )
     return bedmethylitemgroup
-
-
-def subset_bed_columns(bed):
-    bed_report = bed[columns_for_pdf_report]
-    # These were designed to be more informative and fit the report:
-    new_columnnames = [
-        "LOC",
-        "Strand",
-        "COV",
-        "% mod",
-        "MOD",
-        "STD",
-        "OTH",
-        "del",
-        "fail",
-        "diff",
-        "nocall",
-        "STATUS",
-    ]
-    bed_report.columns = new_columnnames
-
-    return bed_report
-
-
-class BedmethylItemGroup:
-    """A group of BedmethylItem instances for reporting.
-
-
-    **Parameters**
-
-    **bedmethylitems**
-    > A list of BedmethylItem instances.
-
-    **parameter_dict**
-    > A dictionary of analysis parameters (`dict`).
-    """
-
-    def __init__(self, bedmethylitems, parameter_dict):
-        self.bedmethylitems = bedmethylitems
-        self.parameter_dict = parameter_dict
-        self.number_of_samples = len(bedmethylitems)
-
-    def perform_all_analysis_in_bedmethylitemgroup(self):
-        for bedmethylitem in self.bedmethylitems:
-            bedmethylitem.perform_analysis(parameter_dict=self.parameter_dict)
-        self.comparisons_performed = True
