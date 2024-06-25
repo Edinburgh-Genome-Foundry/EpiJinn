@@ -48,12 +48,12 @@ each bedmethylitem in bedmethylitemgroup.bedmethylitems
     h3 {{ bedresult.mod_abbreviation }} ({{ bedresult.modification }}) &nbsp;&nbsp; × &nbsp;&nbsp; {{ bedresult.methylase_str }}
     hr
 
-    //- if bedresult.img_created
+    if bedresult.img_created
 
-    img#diff-figure(src="{{ bedresult.figure_data }}")
+      img#diff-figure(src="{{ bedresult.figure_data }}")
 
-    //- else
-    //-   p The pattern was found more than {{ bedresult.feature_cutoff }} times, therefore the sequence plot was not created.
+    else
+      p The pattern was found more than <b>{{ bedresult.feature_cutoff }}</b> times, therefore the sequence plot was not created.
 
     p Bedmethyl table:
 
