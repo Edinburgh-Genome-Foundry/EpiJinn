@@ -45,8 +45,10 @@ each bedmethylitem in bedmethylitemgroup.bedmethylitems
     div(style="margin-top:1cm; margin-bottom:1cm;")
 
     hr
-    h3 {{ bedresult.mod_abbreviation }} ({{ bedresult.modification }}) &nbsp;&nbsp; × &nbsp;&nbsp; {{ bedresult.methylase_str }}
+    h3 {{ bedresult.mod_abbreviation }} &nbsp;&nbsp; × &nbsp;&nbsp; {{ bedresult.methylase_str }}
     hr
+
+    p Modification code "<b>{{ bedresult.modification }}</b>" × <b>{{ bedresult.methylase_seq }}</b> sequence pattern.
 
     if bedresult.img_created
 

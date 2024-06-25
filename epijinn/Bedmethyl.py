@@ -125,7 +125,9 @@ class BedResult:
             MODIFICATION_CODES["Code"] == self.modification
         ].Unmodified_base.iloc[0]
 
-        self.methylase_str = methylase  # for the report
+        self.methylase = methylase
+        self.methylase_str = methylase.name  # for the report
+        self.methylase_seq = methylase.sequence  # for the report
         self.bed = bed
         self.record = record
 
@@ -208,7 +210,7 @@ class BedmethylItem:
                 final_bed = self.subset_bed_columns(bed_binarized)
                 bedresult = BedResult(
                     modification=modification,
-                    methylase=methylase_str,
+                    methylase=methylase,
                     bed=final_bed,
                     record=annotated_record,
                 )
