@@ -177,6 +177,16 @@ class Methylator:
 
 
 def annotate_methylation(seqrecord, methylases=None):
+    """Annotate SeqRecord with methylation patterns and methylated nucleotides.
+
+    **Parameters**
+
+    **seqrecord**
+    > A Biopython `SeqRecord`.
+
+    **methylases**
+    > A `list` of `Methylase` instances.
+    """
     if methylases is None:
         methylases = list(METHYLASES.values())
     for methylase in methylases:
@@ -209,22 +219,25 @@ def annotate_methylation(seqrecord, methylases=None):
                         qualifiers={"label": label, "note": name},
                     )
                 )
-                # Negative strand:
-                methylated_position = match.start + methylase.index_neg
-                methylated_nucleotide = str(
-                    Seq(methylase.sequence[methylase.index_neg]).reverse_complement()
-                )
-                label = "@epijinn(" + methylated_nucleotide + ", strand=-1)"
-                seqrecord.features.append(
-                    SeqFeature(
-                        FeatureLocation(
-                            methylated_position, methylated_position + 1, strand=-1
-                        ),
-                        type="misc_feature",
-                        id="@epijinn",
-                        qualifiers={"label": label, "note": name},
+                # Negative strand (don't annotate if pattern is 1-base long):
+                if methylase.index_neg:  # `None` skips this step
+                    methylated_position = match.start + methylase.index_neg
+                    methylated_nucleotide = str(
+                        Seq(
+                            methylase.sequence[methylase.index_neg]
+                        ).reverse_complement()
                     )
-                )
+                    label = "@epijinn(" + methylated_nucleotide + ", strand=-1)"
+                    seqrecord.features.append(
+                        SeqFeature(
+                            FeatureLocation(
+                                methylated_position, methylated_position + 1, strand=-1
+                            ),
+                            type="misc_feature",
+                            id="@epijinn",
+                            qualifiers={"label": label, "note": name},
+                        )
+                    )
 
         # Repeat for reverse complement, if not palindromic:
         if Seq(methylase.sequence) != Seq(methylase.sequence).reverse_complement():
@@ -267,23 +280,26 @@ def annotate_methylation(seqrecord, methylases=None):
                     # Mark methylation in antisense of the enzyme site:
                     # reverse complement so need to count backwards, and strand=1
                     # subtract 1 to account for range
-                    methylated_position = match.end - 1 - methylase.index_neg
-                    methylated_nucleotide = str(
-                        Seq(
-                            methylase.sequence[methylase.index_neg]
-                        ).reverse_complement()
-                    )
-                    label = "@epijinn(" + methylated_nucleotide + ", strand=1)"
-                    seqrecord.features.append(
-                        SeqFeature(
-                            FeatureLocation(
-                                methylated_position, methylated_position + 1, strand=1
-                            ),
-                            type="misc_feature",
-                            id="@epijinn",
-                            qualifiers={"label": label, "note": name},
+                    if methylase.index_neg:  # again, don't annotate if 1-base long
+                        methylated_position = match.end - 1 - methylase.index_neg
+                        methylated_nucleotide = str(
+                            Seq(
+                                methylase.sequence[methylase.index_neg]
+                            ).reverse_complement()
                         )
-                    )
+                        label = "@epijinn(" + methylated_nucleotide + ", strand=1)"
+                        seqrecord.features.append(
+                            SeqFeature(
+                                FeatureLocation(
+                                    methylated_position,
+                                    methylated_position + 1,
+                                    strand=1,
+                                ),
+                                type="misc_feature",
+                                id="@epijinn",
+                                qualifiers={"label": label, "note": name},
+                            )
+                        )
 
     return seqrecord
 
@@ -297,11 +313,13 @@ GpC = Methylase(name="GpC", sequence="GC", index_pos=1, index_neg=0)
 HaeIII = Methylase(name="HaeIII", sequence="GGCC", index_pos=2, index_neg=1)
 Hhal = Methylase(name="Hhal", sequence="GCGC", index_pos=1, index_neg=2)
 HpaII = Methylase(name="HpaII", sequence="CCGG", index_pos=1, index_neg=2)
+# For cytosine (not an enzyme):
+MetC = Methylase(name="MetC", sequence="C", index_pos=0, index_neg=None)
 MspI = Methylase(name="MspI", sequence="CCGG", index_pos=0, index_neg=3)
 
 # Adenine:
 EcoBI = Methylase(name="EcoBI", sequence="TGANNNNNNNNTGCT", index_pos=2, index_neg=11)
-# EcoGII = Methylase(name="EcoGII", sequence="A", index_pos=0, index_neg=)  # no valid index_neg value
+EcoGII = Methylase(name="EcoGII", sequence="A", index_pos=0, index_neg=None)
 EcoKDam = Methylase(name="EcoKDam", sequence="GATC", index_pos=1, index_neg=2)
 EcoKI = Methylase(name="EcoKI", sequence="AACNNNNNNGTGC", index_pos=1, index_neg=10)
 EcoRI = Methylase(name="EcoRI", sequence="GAATTC", index_pos=2, index_neg=3)
@@ -317,6 +335,7 @@ METHYLASES = {
     HaeIII.name: HaeIII,
     Hhal.name: Hhal,
     HpaII.name: HpaII,
+    MetC.name: MetC,
     MspI.name: MspI,
     EcoBI.name: EcoBI,
     # EcoGII.name: EcoGII,
